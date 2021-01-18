@@ -1,0 +1,106 @@
+FROM tensorflow/tensorflow:1.13.1-gpu-py3 as base
+
+USER root
+# set up the basic image
+
+ENV USER=cleverspeech
+ENV USER_ID=9999
+ENV GROUP_ID=9999
+
+RUN groupadd -g ${GROUP_ID} ${USER}
+RUN useradd -m ${USER} -g ${GROUP_ID} -u ${USER_ID}
+
+RUN apt update
+RUN apt install -y \
+	git \
+	curl \
+	wget \
+	software-properties-common \
+	libsndfile1 \
+	sox \
+	libsox-dev \
+	swig \
+	nano \
+	sudo \
+	python3 \
+	llvm-8*
+
+# https://askubuntu.com/questions/1286131/how-do-i-install-llvm-10-on-ubuntu-18-04/1286132
+# but with llvm version 8
+RUN ln -s /usr/bin/llvm-config-8 /usr/bin/llvm-config
+
+#############################
+
+FROM base as downloads
+
+# download necessary files for deepspeech
+
+USER root
+RUN mkdir /data/ && chown $(id -u cleverspeech):$(id -g cleverspeech) /data/
+
+USER cleverspeech
+
+ARG DS_VERSION=0.4.1
+ENV DS_VERSION=${DS_VERSION}
+
+RUN mkdir -p /data/checkpoint
+RUN mkdir -p /data/models
+RUN mkdir -p /data/samples/all /data/samples/10 /data/samples/100 /data/samples/1000
+RUN mkdir -p /data/adv/
+
+COPY deepspeech-${DS_VERSION}-checkpoint/ /data/checkpoint/
+COPY models/ /data/models/
+
+# Be explicit about copying
+
+COPY samples/10/ /data/samples/10/
+COPY samples/100/ /data/samples/100/
+COPY samples/1000/ /data/samples/1000/
+COPY samples/all/ /data/samples/all/
+COPY samples/cv-valid-test.csv /data/samples/cv-valid-test.csv
+
+ENV DEEPSPEECH_CHECKPOINT_DIR=/data/checkpoint
+ENV DEEPSPEECH_MODEL_DIR=/data/models
+
+#############################
+
+FROM downloads as setup
+
+# Do cleverSpeech setup
+USER cleverspeech
+
+ENV CLEVERSPEECH_URL=https://github.com/dijksterhuis/cleverSpeech
+RUN git clone ${CLEVERSPEECH_URL} /home/cleverspeech/cleverSpeech
+
+WORKDIR /home/cleverspeech/cleverSpeech
+
+RUN git checkout build && git pull
+RUN git submodule update --init --recursive
+
+RUN pip3 install --upgrade --user -r ./DeepSpeech/requirements.txt
+RUN pip3 install --upgrade --user -r ./reqs.txt
+
+ENV DEEPSPEECH_SRC_DIR=/home/cleverspeech/cleverSpeech/DeepSpeech/
+ENV PYTHONPATH="${PYTHONPATH}:/home/cleverspeech/cleverSpeech"
+
+# Build decoder
+USER root
+WORKDIR /home/cleverspeech/cleverSpeech/DeepSpeech/native_client/ctcdecode
+RUN make bindings NUM_PROCESSES=2
+
+USER cleverspeech
+RUN pip3 install --user --force-reinstall ./dist/*.whl
+
+# Entrypoints and clean up
+RUN rm -rf /tmp/*
+
+#############################
+
+FROM setup
+
+# entrypoint must be run as root
+USER root
+COPY ./Dockerfiles/entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
+
+WORKDIR /home/cleverspeech/cleverSpeech
