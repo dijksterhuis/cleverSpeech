@@ -1,25 +1,39 @@
 # cleverSpeech
 
-Classes/modules I use to generate adversarial examples for automatic speech recognition models in
-tensorflow. Began as a modified version of [Carlini and Wagner's Attacks][0] against
+Code to generate adversarial examples (confidence/evasion attacks) for automatic speech recognition
+models in tensorflow. Began as a modified version of [Carlini and Wagner's Attacks][0] against
 [Mozilla STT][1].
 
 Mainly used to prototype and evaluate attacks, so if you're looking for production ready code then
-this is not the repo for you.
+this might not be the repo for you.
 
-If you're looking for the experiments I've run as part of my PhD, then head over to the
-[cleverSpeechExperiments](https://github.com/dijksterhuis/cleverSpeechExperiments) repo.
+This is the main repo used to create the released docker images. Everything is glued together with
+git submodules (helps me to work on code in separation, rather than making major changes and causing
+spaghetti code to fly everywhere).
 
-## Run the code
+If you want to see the package in action, grab a docker image or clone this repo using the steps
+outlined below.
 
-*N.B.*: I'm in the middle of a big refactor, so these docker instructions are out of date.
+# repository structure
 
-Docker images are available [here](https://hub.docker.com/u/dijksterhuis/cleverspeech).
+- `.jenkins` -- Continuous deployment groovy scripts for a local jenkins instance.
+- `./bin/` -- Shell scripts to get audio sample data and (hopefully) DeepSpeech data files.
+- `./cleverspeech/` -- main package to handle data loading and to create, execute and evaluate attacks.
+- `./docker/` -- dockerfiles and relevant files. Used by Jenkins to build images and run experiments.
+- `./experiments/` -- Script definitions for different attacks/experiments live here. Includes
+additional code which extends the `./cleverspeech` package for individual experiments.
+- `./models/` -- originally meant to include a variety of models I was aiming to test, but I've
+ended up only testings Mozilla DeepSpeech for now.
 
-The `latest` or `experiment` tags include the experiments I've run for my PhD work as part of the
-[cleverSpeechExperiments](https://github.com/dijksterhuis/cleverSpeechExperiments) repo.
-The `build` tag is the basic image with _only_ the
-[cleverSpeech](https://github.com/dijksterhuis/cleverSpeech) repo included.
+
+## run the code
+
+*N.B.*: These docker instructions are out of date as I'm in the middle of a big refactor.
+
+Docker images are available [here](https://hub.docker.com/u/dijksterhuis/cleverspeech). The `latest`
+tag image includes all experiments at their current point in development (basically dev/unstable).
+`r*` tags are snapshots of the code when run for a specific experiment (e.g. for a
+paper/thesis/workshop etc.).
 
 My work is packaged with docker so that:
 1. You don't have to go through the same dependency hell I went through.
@@ -47,7 +61,7 @@ docker run \
 python3 ./experiments/Baselines/attacks.py baseline
 ```
 
-The `LOCAL_UID` and `LOCAL_GID` environment variables must be set. They're used to map file
+The `LOCAL_UID` and `LOCAL_GID` environment variables **must** be set. They're used to map file
 permissions in `/home/cleverspeech` user to your current user, otherwise you have to mess around
 with root file permission problems on any generated data.
 
@@ -55,16 +69,38 @@ Check out the `attacks.py` scripts for additional usage, especially pay attentio
 dictionaries, any `GLOBAL_VARS` (top of the scripts) and the `boilerplate.py` files. Feel free to
 email me with any queries.
 
-### Non-Docker Usage
+### don't like docker?
 
-Only tested on Ubuntu 18.04. Will require `tensorflow-gpu`, so make sure your GPU is setup
-correctly.
+You're mad. But okay. Here's how this _should be installable_. Only tested on Ubuntu 18.04. Will
+require `tensorflow-gpu` v1.13.1, so [make sure your GPU is setup
+correctly](https://www.tensorflow.org/install/gpu#older_versions_of_tensorflow).
 
 1. Run `git clone --recurse-submodules https://github.com/dijksterhuis/cleverSpeech.git`
 2. Run `./install.sh`
 3. Run an experiment, e.g. `python3 ./experiments/Baselines/attacks.py baseline`
 
-### Citations / Licenses / Sourced Works
+TODO: Change the deepspeech-checkpoint paths to point at some download scripts in `./bin/`.
+
+### current gotchas and additional notes
+
+**1**: Only 16 bit signed integer audio files are supported -- i.e. mozilla common voice v1.
+
+**2**: Integrity of the adversarial examples is an ongoing issue when using the
+`deepspeech`/`deepspeech-gpu` python library (the one installed with `pip`). The DeepSpeech source
+ingests `tf.float32` inputs `-2^15 <= x <= 2^15 -1`, but the `deepspeech` library _only_ ingests 16
+bit integers. Use the [`classify.py` script](cleverspeech/Evaluation/classify.py) in
+`./cleverspeech/Evaluation/` to validate outputs.
+
+**3**: I run my experiments in sets (not batches!) of 10 examples. Adam struggles to optimise
+as it's built for batch-wise learning rate tuning, but each of our examples are independent members
+of a set (Lea Schoenherr's [recent paper][12] talks about this briefly).
+
+**4**: `.jenkins` contains all the build and execution pipeline steps for the docker images and
+experiments.
+
+
+
+### citations, licenses and sourced works
 
 TODO: Update licenses.
 
