@@ -14,7 +14,7 @@ spaghetti code to fly everywhere).
 If you want to see the package in action, grab a docker image or clone this repo using the steps
 outlined below.
 
-# repository structure
+### structure
 
 - `.jenkins` -- Continuous deployment groovy scripts for a local jenkins instance.
 - `./bin/` -- Shell scripts to get audio sample data and (hopefully) DeepSpeech data files.
@@ -100,7 +100,7 @@ experiments.
 
 
 
-### citations, licenses and sourced works
+## citations, licenses and sourced works
 
 TODO: Update licenses.
 
