@@ -1,18 +1,18 @@
 [submodule "cleverspeech/utils"]
 	path = cleverspeech/utils
-	url = https://github.com/dijksterhuis/cleverspeech-utils.git
+	url = ../cleverspeech-utils.git
 [submodule "cleverspeech/eval"]
 	path = cleverspeech/eval
-	url = https://github.com/dijksterhuis/cleverspeech-eval.git
+	url = ../cleverspeech-eval.git
 [submodule "cleverspeech/data"]
 	path = cleverspeech/data
-	url = https://github.com/dijksterhuis/cleverspeech-data.git
+	url = ../cleverspeech-data.git
 [submodule "cleverspeech/graph"]
 	path = cleverspeech/graph
-	url = https://github.com/dijksterhuis/cleverspeech-graph.git
+	url = ../cleverspeech-graph.git
 [submodule "models/DeepSpeech"]
 	path = models/DeepSpeech
-	url = https://github.com/dijksterhuis/DeepSpeechAdversary.git
+	url = ../DeepSpeechAdversary.git
 [submodule "experiments"]
 	path = experiments
-	url = https://github.com/dijksterhuis/cleverspeech-exp.git
+	url = ../cleverspeech-exp.git
