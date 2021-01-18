@@ -16,14 +16,14 @@ outlined below.
 
 ### structure
 
-- `.jenkins` -- Continuous deployment groovy scripts for a local jenkins instance.
-- `./bin/` -- Shell scripts to get audio sample data and (hopefully) DeepSpeech data files.
-- `./cleverspeech/` -- main package to handle data loading and to create, execute and evaluate attacks.
-- `./docker/` -- dockerfiles and relevant files. Used by Jenkins to build images and run experiments.
-- `./experiments/` -- Script definitions for different attacks/experiments live here. Includes
-additional code which extends the `./cleverspeech` package for individual experiments.
-- `./models/` -- originally meant to include a variety of models I was aiming to test, but I've
-ended up only testings Mozilla DeepSpeech for now.
+- `.jenkins` - Continuous deployment groovy scripts for a local jenkins instance.
+- `./bin/` - Shell scripts to get audio sample data and (hopefully) DeepSpeech data files.
+- `./cleverspeech/` - Main package to handle data loading and to create, execute and evaluate attacks.
+- `./docker/` - Files to build docker images.
+- `./experiments/` - Script definitions for different attacks/experiments live here. Includes
+additional code which extends the `./cleverspeech/` package for individual experiments.
+- `./models/` - originally meant to include a variety of models I was aiming to test, but I've
+ended up only testing Mozilla DeepSpeech so far.
 
 
 ## run the code
@@ -56,7 +56,7 @@ docker run \
     -v path/to/output/dir:/home/cleverspeech/cleverSpeech/adv:rw \
     dijksterhuis/cleverspeech:latest
 ```
-4. Run one of the scripts from [cleverSpeechExperiments](https://github.com/dijksterhuis/cleverSpeechExperiments)
+4. Run one of the scripts from [`./experiments`](https://github.com/dijksterhuis/cleverspeech-exp)
 ```bash
 python3 ./experiments/Baselines/attacks.py baseline
 ```
@@ -81,22 +81,18 @@ correctly](https://www.tensorflow.org/install/gpu#older_versions_of_tensorflow).
 
 TODO: Change the deepspeech-checkpoint paths to point at some download scripts in `./bin/`.
 
-### current gotchas and additional notes
+## current gotchas
 
-**1**: Only 16 bit signed integer audio files are supported -- i.e. mozilla common voice v1.
+**1**: Only 16 bit signed integer audio files are supported, i.e. mozilla common voice v1.
 
 **2**: Integrity of the adversarial examples is an ongoing issue when using the
-`deepspeech`/`deepspeech-gpu` python library (the one installed with `pip`). The DeepSpeech source
-ingests `tf.float32` inputs `-2^15 <= x <= 2^15 -1`, but the `deepspeech` library _only_ ingests 16
-bit integers. Use the [`classify.py` script](cleverspeech/Evaluation/classify.py) in
-`./cleverspeech/Evaluation/` to validate outputs.
+`deepspeech`/`deepspeech-gpu` python library (the one installed with `pip`). DeepSpeech source code
+ingests `tf.float32` inputs `-2^15 <= x <= 2^15 -1` but the `deepspeech` library ingests 16-bit
+integers, which breaks the attacks.
 
 **3**: I run my experiments in sets (not batches!) of 10 examples. Adam struggles to optimise
 as it's built for batch-wise learning rate tuning, but each of our examples are independent members
 of a set (Lea Schoenherr's [recent paper][12] talks about this briefly).
-
-**4**: `.jenkins` contains all the build and execution pipeline steps for the docker images and
-experiments.
 
 
 
