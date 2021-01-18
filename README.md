@@ -10,9 +10,59 @@ this is not the repo for you.
 If you're looking for the experiments I've run as part of my PhD, then head over to the
 [cleverSpeechExperiments](https://github.com/dijksterhuis/cleverSpeechExperiments) repo.
 
-### Run the code
-See this repo:
-[cleverSpeechExperiments](https://github.com/dijksterhuis/cleverSpeechExperiments)
+## Run the code
+
+*N.B.*: I'm in the middle of a big refactor, so these docker instructions are out of date.
+
+Docker images are available [here](https://hub.docker.com/u/dijksterhuis/cleverspeech).
+
+The `latest` or `experiment` tags include the experiments I've run for my PhD work as part of the
+[cleverSpeechExperiments](https://github.com/dijksterhuis/cleverSpeechExperiments) repo.
+The `build` tag is the basic image with _only_ the
+[cleverSpeech](https://github.com/dijksterhuis/cleverSpeech) repo included.
+
+My work is packaged with docker so that:
+1. You don't have to go through the same dependency hell I went through.
+2. You don't have to worry about getting the right data, checkpoints, commits etc.
+3. You can validate my results with the exact set-up I had by running one/two commands.
+
+To start running some experiments with docker:
+
+1. Install the latest version of [docker][10] (at least version `19.03`).
+2. Install and configure the [NVIDIA container runtime][8].
+3. Run the container (the image itself will be pulled automatically):
+```bash
+docker run \
+    -it \
+    --rm \
+    --gpus all \
+    -e LOCAL_UID=$(id -u ${USER}) \
+    -e LOCAL_GID=$(id -g ${USER}) \
+    -v path/to/original/samples/dir:/home/cleverspeech/cleverSpeech/samples:ro \
+    -v path/to/output/dir:/home/cleverspeech/cleverSpeech/adv:rw \
+    dijksterhuis/cleverspeech:latest
+```
+4. Run one of the scripts from [cleverSpeechExperiments](https://github.com/dijksterhuis/cleverSpeechExperiments)
+```bash
+python3 ./experiments/Baselines/attacks.py baseline
+```
+
+The `LOCAL_UID` and `LOCAL_GID` environment variables must be set. They're used to map file
+permissions in `/home/cleverspeech` user to your current user, otherwise you have to mess around
+with root file permission problems on any generated data.
+
+Check out the `attacks.py` scripts for additional usage, especially pay attention to the `settings`
+dictionaries, any `GLOBAL_VARS` (top of the scripts) and the `boilerplate.py` files. Feel free to
+email me with any queries.
+
+### Non-Docker Usage
+
+Only tested on Ubuntu 18.04. Will require `tensorflow-gpu`, so make sure your GPU is setup
+correctly.
+
+1. Run `git clone --recurse-submodules https://github.com/dijksterhuis/cleverSpeech.git`
+2. Run `./install.sh`
+3. Run an experiment, e.g. `python3 ./experiments/Baselines/attacks.py baseline`
 
 ### Citations / Licenses / Sourced Works
 
