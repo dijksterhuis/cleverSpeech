@@ -13,3 +13,6 @@
 [submodule "models/DeepSpeech"]
 	path = models/DeepSpeech
 	url = git@github.com:dijksterhuis/DeepSpeechAdversary.git
+[submodule "experiments"]
+	path = experiments
+	url = git@github.com:dijksterhuis/cleverspeech-exp.git
