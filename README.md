@@ -16,24 +16,23 @@ outlined below.
 
 ### cleverSpeech top-level project structure
 
-- `.jenkins` contains the groovy scripts used by a local Jenkins instance to build and run experiments.
-- `./bin/` contains shell scripts to get audio sample data and (hopefully) DeepSpeech data files.
-- [`./cleverspeech/`](https://github.com/dijksterhuis/cleverspeech-py) is the main package used to design and run attacks.
-- `./docker/` contains the files needed to build docker images.
-- [`./experiments/`](https://github.com/dijksterhuis/cleverspeech-exp) has all the definitions for
-different attacks/experiments. Includes additional code for some experiments which extends the
+- `jenkins` contains the scripts used by a local Jenkins instance to build and run experiments.
+- `bin/` contains shell scripts to get audio sample data and DeepSpeech data files.
+- [`cleverspeech/`](https://github.com/dijksterhuis/cleverspeech-py) is the main package used to
+design and run attacks.
+- `docker/` contains the files needed to build the docker images.
+- [`experiments/`](https://github.com/dijksterhuis/cleverspeech-exp) has all the definitions for
+different attacks/experiments. Includes additional code for some experiments which extend the
 `cleverspeech` package.
-- `./models/` was originally meant to include a variety of models I was aiming to test but only
+- `models/` was originally meant to include a variety of models I was aiming to test but only
 includes a [modified version of Mozilla DeepSpeech](https://github.com/dijksterhuis/DeepSpeechAdversary)
 so far.
 
 ## run the code
 
-*N.B.*: These docker instructions are out of date as I'm in the middle of a big refactor.
-
 Docker images are available [here](https://hub.docker.com/u/dijksterhuis/cleverspeech). The `latest`
 tag image includes all experiments at their current point in development (basically dev/unstable).
-`r*` tags are snapshots of the code when run for a specific experiment (e.g. for a
+`r*` tags will be snapshots of the code that was run for a specific experiment (e.g. for a
 paper/thesis/workshop etc.).
 
 My work is packaged with docker so that:
@@ -45,7 +44,8 @@ To start running some experiments with docker:
 
 1. Install the latest version of [docker][10] (at least version `19.03`).
 2. Install and configure the [NVIDIA container runtime][8].
-3. Run the container (the image itself will be pulled automatically):
+3. Run the container (the image itself will be pulled automatically). You will need to wait a few
+minutes for file permissions to propagate:
 ```bash
 docker run \
     -it \
@@ -53,7 +53,6 @@ docker run \
     --gpus all \
     -e LOCAL_UID=$(id -u ${USER}) \
     -e LOCAL_GID=$(id -g ${USER}) \
-    -v path/to/original/samples/dir:/home/cleverspeech/cleverSpeech/samples:ro \
     -v path/to/output/dir:/home/cleverspeech/cleverSpeech/adv:rw \
     dijksterhuis/cleverspeech:latest
 ```
@@ -72,9 +71,14 @@ email me with any queries.
 
 ### don't like docker?
 
-You're mad. But okay. Here's how this _should be installable_. Only tested on Ubuntu 18.04. Will
-require `tensorflow-gpu` v1.13.1, so [make sure your GPU is setup
-correctly](https://www.tensorflow.org/install/gpu#older_versions_of_tensorflow).
+You're mad, mad I tell you!
+
+Anyway, here's how this _should_ be installable. Only tested on Ubuntu 18.04. Will require `tensorflow-gpu`
+v1.13.1, so [make sure your GPU is setup correctly](https://www.tensorflow.org/install/gpu#older_versions_of_tensorflow).
+
+You'll also need to install the Mozilla DeepSpeech ctc decoder package manually. Checkout [this
+section](https://github.com/dijksterhuis/cleverSpeech/blob/master/docker/Dockerfile.build#L54) of
+`docker/Dockerfile.build`.
 
 1. Run `git clone --recurse-submodules https://github.com/dijksterhuis/cleverSpeech.git`
 2. Run `./install.sh`
@@ -94,7 +98,6 @@ integers, which breaks the attacks.
 **3**: I run my experiments in sets (not batches!) of 10 examples. Adam struggles to optimise
 as it's built for batch-wise learning rate tuning, but each of our examples are independent members
 of a set (Lea Schoenherr's [recent paper][12] talks about this briefly).
-
 
 
 ## citations, licenses and sourced works
