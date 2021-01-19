@@ -21,9 +21,18 @@ outlined below.
 - `./cleverspeech/` - Main package to handle data loading and to create, execute and evaluate attacks.
 - `./docker/` - Files to build docker images.
 - `./experiments/` - Script definitions for different attacks/experiments live here. Includes
-additional code which extends the `./cleverspeech/` package for individual experiments.
+additional code which extends the `./cleverspeech/` package for individual experiments. Experiments
+submodule lives [here](https://github.com/dijksterhuis/cleverspeech-exp).
 - `./models/` - originally meant to include a variety of models I was aiming to test, but I've
 ended up only testing Mozilla DeepSpeech so far.
+
+### `./cleverspeech/` structure
+
+The main API for building attacks is organised like this:
+- [`cleverspeech.data`](https://github.com/dijksterhuis/cleverspeech-data) for loading data.
+- [`cleverspeech.eval`](https://github.com/dijksterhuis/cleverspeech-eval) for evaluating attack success.
+- [`cleverspeech.graph`](https://github.com/dijksterhuis/cleverspeech-graph) for building attack graphs.
+- [`cleverspeech.utils`](https://github.com/dijksterhuis/cleverspeech-utils) for misc utils, like the parallel attack spawner.
 
 
 ## run the code
