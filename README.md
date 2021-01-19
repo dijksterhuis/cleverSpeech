@@ -16,9 +16,9 @@ outlined below.
 
 ### cleverSpeech top-level project structure
 
-- `.jenkins` contains the groovy script used by a local Jenkins instance to build and run experiments.
+- `.jenkins` contains the groovy scripts used by a local Jenkins instance to build and run experiments.
 - `./bin/` contains shell scripts to get audio sample data and (hopefully) DeepSpeech data files.
-- `./cleverspeech/` is the main package used to design and run attacks.
+- [`./cleverspeech/`](https://github.com/dijksterhuis/cleverspeech-py) is the main package used to design and run attacks.
 - `./docker/` contains the files needed to build docker images.
 - [`./experiments/`](https://github.com/dijksterhuis/cleverspeech-exp) has all the definitions for
 different attacks/experiments. Includes additional code for some experiments which extends the
@@ -26,15 +26,6 @@ different attacks/experiments. Includes additional code for some experiments whi
 - `./models/` was originally meant to include a variety of models I was aiming to test but only
 includes a [modified version of Mozilla DeepSpeech](https://github.com/dijksterhuis/DeepSpeechAdversary)
 so far.
-
-### `cleverspeech` package structure
-
-The main API for building attacks is organised like so:
-- [`cleverspeech.data`](https://github.com/dijksterhuis/cleverspeech-data) for loading data.
-- [`cleverspeech.eval`](https://github.com/dijksterhuis/cleverspeech-eval) for evaluating attack success.
-- [`cleverspeech.graph`](https://github.com/dijksterhuis/cleverspeech-graph) for building attack graphs (see `cleverspeech.graph.GraphConstructor` for more information).
-- [`cleverspeech.utils`](https://github.com/dijksterhuis/cleverspeech-utils) for misc utils, like the parallel attack spawner.
-
 
 ## run the code
 
