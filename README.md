@@ -14,24 +14,25 @@ spaghetti code to fly everywhere).
 If you want to see the package in action, grab a docker image or clone this repo using the steps
 outlined below.
 
-### structure
+### cleverSpeech top-level project structure
 
-- `.jenkins` - Continuous deployment groovy scripts for a local jenkins instance.
-- `./bin/` - Shell scripts to get audio sample data and (hopefully) DeepSpeech data files.
-- `./cleverspeech/` - Main package to handle data loading and to create, execute and evaluate attacks.
-- `./docker/` - Files to build docker images.
-- `./experiments/` - Script definitions for different attacks/experiments live here. Includes
-additional code which extends the `./cleverspeech/` package for individual experiments. Experiments
-submodule lives [here](https://github.com/dijksterhuis/cleverspeech-exp).
-- `./models/` - originally meant to include a variety of models I was aiming to test, but I've
-ended up only testing Mozilla DeepSpeech so far.
+- `.jenkins` contains the groovy script used by a local Jenkins instance to build and run experiments.
+- `./bin/` contains shell scripts to get audio sample data and (hopefully) DeepSpeech data files.
+- `./cleverspeech/` is the main package used to design and run attacks.
+- `./docker/` contains the files needed to build docker images.
+- [`./experiments/`](https://github.com/dijksterhuis/cleverspeech-exp) has all the definitions for
+different attacks/experiments. Includes additional code for some experiments which extends the
+`cleverspeech` package.
+- `./models/` was originally meant to include a variety of models I was aiming to test but only
+includes a [modified version of Mozilla DeepSpeech](https://github.com/dijksterhuis/DeepSpeechAdversary)
+so far.
 
-### `./cleverspeech/` structure
+### `cleverspeech` package structure
 
-The main API for building attacks is organised like this:
+The main API for building attacks is organised like so:
 - [`cleverspeech.data`](https://github.com/dijksterhuis/cleverspeech-data) for loading data.
 - [`cleverspeech.eval`](https://github.com/dijksterhuis/cleverspeech-eval) for evaluating attack success.
-- [`cleverspeech.graph`](https://github.com/dijksterhuis/cleverspeech-graph) for building attack graphs.
+- [`cleverspeech.graph`](https://github.com/dijksterhuis/cleverspeech-graph) for building attack graphs (see `cleverspeech.graph.GraphConstructor` for more information).
 - [`cleverspeech.utils`](https://github.com/dijksterhuis/cleverspeech-utils) for misc utils, like the parallel attack spawner.
 
 
