@@ -23,9 +23,11 @@ else
     fi
     
     usermod -u ${LOCAL_UID} -g ${LOCAL_GID} cleverspeech
-    chown -R ${LOCAL_UID}:${LOCAL_GID} /home/cleverspeech
-    chown -R ${LOCAL_UID}:${LOCAL_GID} /data/
+    chown -R ${LOCAL_UID}:${LOCAL_GID} /home/cleverspeech/
     echo "Modified. Entering container."
 
-    exec sudo -E -H -u cleverspeech PYTHONPATH=${PYTHONPATH}:${BASE_DIR}/cleverSpeech ${cmd}
+    export PYTHONPATH="${PYTHONPATH}:/home/cleverspeech/cleverSpeech"
+    export PYTHONPATH="${PYTHONPATH}:/home/cleverspeech/cleverSpeech/models/DeepSpeech/src"
+
+    exec sudo -E -H -u cleverspeech PYTHONPATH=${PYTHONPATH} ${cmd}
 fi
