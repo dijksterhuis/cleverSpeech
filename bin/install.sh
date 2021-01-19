@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
-echo "++ | Double-checking that git submodules are installed correctly..."
-# TODO
-echo "-- | Done."
+if [[ $(basename $(pwd)) != "cleverSpeech" ]]
+then
+    echo "Script must be run from the root of the cleverSpeech directory."
+    echo "Like so: ./bin/install.sh"
+    echo "You are currently in $(pwd)"
+    echo "Quitting. "
+    exit
+fi
 
 echo "++ | Adding cleverSpeech to your PYTHONPATH..."
 export PYTHONPATH="${PYTHONPATH}:$(pwd)"
@@ -20,7 +25,7 @@ python3 -m pip install --upgrade --requirement ./reqs.txt
 echo "-- | Done."
 
 echo "++ | Installing victim model python dependencies..."
-python3 -m pip install --upgrade --r ./models/DeepSpeech/requirements.txt
+python3 -m pip install --upgrade --r ./models/DeepSpeech/src/requirements.txt
 echo "-- | Done."
 
 echo "++ | Getting DeepSpeech files..."
@@ -28,7 +33,7 @@ echo "++ | Getting DeepSpeech files..."
 echo "-- | Done."
 
 echo "++ | Getting Common Voice files..."
-./bin/deepspeech/get_model_files.sh
+./bin/attacks/create-samples-dir.sh
 echo "-- | Done."
 
 echo "-------------------------------------------------"
