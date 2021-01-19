@@ -1,10 +1,10 @@
 pipeline {
     agent any
     environment {
+        BASE_IMAGE = "tensorflow/tensorflow:1.13.1-gpu-py3"
         IMAGE_NAME = "dijksterhuis/cleverspeech"
         BUILD_TAG = "build"
-        BRANCH = "rAdditiveSynthesis"
-        TAG = "${BRANCH}"
+        OUTPUT_IMAGE = "${IMAGE_NAME}:${BUILD_TAG}"
     }
 
     stages {
@@ -16,23 +16,22 @@ pipeline {
             }
         }
 
-        stage('Checkout build branch.') {
+        stage('Checkout vcs.') {
             steps {
-                git branch: "${BUILD_TAG}", credentialsId: 'git-mr', url: 'https://github.com/dijksterhuis/cleverSpeech.git'
+                git branch: "${BRANCH}", credentialsId: 'git-mr', url: 'https://github.com/dijksterhuis/cleverSpeech.git'
             }
         }
 
-        stage("Build release images.") {
+        stage("Build base image.") {
             steps {
                 script {
 
                     sh """
-                        docker build \
-                        -t ${IMAGE_NAME}:${TAG} \
-                        -f ./Dockerfiles/release \
+                        DOCKER_BUILDKIT=1 docker build \
+                        -t ${OUTPUT_IMAGE} \
+                        -f ./docker/Dockerfile.build \
                         --force-rm \
                         --no-cache \
-                        --build-arg BRANCH=${BRANCH} \
                         .
 
                     """
@@ -44,7 +43,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry([ credentialsId: "dhub-mr", url: "" ]) {
-                        sh "docker push ${IMAGE_NAME}:${TAG}"
+                        sh "docker push ${OUTPUT_IMAGE}"
                     }
                 }
             }
@@ -54,7 +53,7 @@ pipeline {
         always {
             sh "docker image prune -f"
             sh "docker container prune -f"
-            sh "docker image rm ${IMAGE_NAME}:${TAG}"
+            sh "docker image rm ${BASE_IMAGE}"
         }
     }
 }

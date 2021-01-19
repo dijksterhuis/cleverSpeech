@@ -16,9 +16,9 @@ pipeline {
             }
         }
 
-        stage('Checkout build branch.') {
+        stage('Checkout vcs.') {
             steps {
-                git branch: "${BUILD_TAG}", credentialsId: 'git-mr', url: 'https://github.com/dijksterhuis/cleverSpeech.git'
+                git branch: "${BRANCH}", credentialsId: 'git-mr', url: 'https://github.com/dijksterhuis/cleverSpeech.git'
             }
         }
 
@@ -27,12 +27,11 @@ pipeline {
                 script {
 
                     sh """
-                        docker build \
+                        DOCKER_BUILDKIT=1 docker build \
                         -t ${IMAGE_NAME}:${TAG} \
-                        -f ./Dockerfiles/release \
+                        -f ./docker/Dockerfile.latest \
                         --force-rm \
                         --no-cache \
-                        --build-arg BRANCH=${BRANCH} \
                         .
 
                     """
