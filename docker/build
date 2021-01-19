@@ -28,41 +28,38 @@ RUN apt install -y \
 # https://askubuntu.com/questions/1286131/how-do-i-install-llvm-10-on-ubuntu-18-04/1286132
 # but with llvm version 8
 RUN ln -s /usr/bin/llvm-config-8 /usr/bin/llvm-config
-
-#############################
-
-FROM base as downloads
-
-# download necessary files for deepspeech
-
-USER root
-RUN mkdir /data/ && chown $(id -u cleverspeech):$(id -g cleverspeech) /data/
-
-# Do cleverSpeech setup
 USER cleverspeech
-
 ENV CLEVERSPEECH_URL=https://github.com/dijksterhuis/cleverSpeech
 RUN git clone --recurse-submodules ${CLEVERSPEECH_URL} /home/cleverspeech/cleverSpeech
 
-WORKDIR /home/cleverspeech/cleverSpeech
 
+#############################
+
+FROM base as dsdownloads
+USER cleverspeech
+WORKDIR /home/cleverspeech/cleverSpeech
 RUN ./bin/deepspeech/get-model-files.sh
+
+#############################
+
+FROM base as csdownloads
+USER cleverspeech
+WORKDIR /home/cleverspeech/cleverSpeech
 RUN ./bin/attacks/create-samples-dir.sh
 
 #############################
 
-FROM downloads as installs
+FROM base as installs
 
 USER cleverspeech
-
+WORKDIR /home/cleverspeech/cleverSpeech
 RUN pip3 install --upgrade --user -r ./models/*/src/requirements.txt
 RUN pip3 install --upgrade --user -r ./reqs.txt
 
+COPY --from=dsdownloads /home/cleverspeech/cleverSpeech/models/DeepSpeech/data/ ./models/DeepSpeech/data/
+COPY --from=csdownloads /home/cleverspeech/cleverSpeech/samples/ ./samples/
+
 ENV PYTHONPATH="${PYTHONPATH}:$(pwd):$(pwd)/models/DeepSpeech/src"
-
-#############################
-
-FROM installs as decoder
 
 # Build DeepSpeech decoder
 USER root
@@ -82,7 +79,6 @@ FROM decoder
 # entrypoint must be run as root so we can switch users
 USER root
 COPY ./docker/entrypoint.sh /entrypoint.sh
+WORKDIR /home/cleverspeech/cleverSpeech
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 
-WORKDIR /home/cleverspeech/cleverSpeech
-RUN ls -al /home/cleverspeech/cleverSpeech/
