@@ -9,5 +9,5 @@
 	branch = master
 [submodule "cleverspeech"]
 	path = cleverspeech
-	url = git@github.com:dijksterhuis/cleverspeech-py.git
+	url = ../cleverspeech-py.git
 	branch = master
