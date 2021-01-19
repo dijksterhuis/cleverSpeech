@@ -81,7 +81,7 @@ section](https://github.com/dijksterhuis/cleverSpeech/blob/master/docker/Dockerf
 `docker/Dockerfile.build`.
 
 1. Run `git clone --recurse-submodules https://github.com/dijksterhuis/cleverSpeech.git`
-2. Run `./install.sh`
+2. Run `cd ./cleverSpeech/ && ./bin/install.sh`
 3. Run an experiment, e.g. `python3 ./experiments/Baselines/attacks.py baseline`
 
 TODO: Change the deepspeech-checkpoint paths to point at some download scripts in `./bin/`.
