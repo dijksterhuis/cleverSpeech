@@ -22,10 +22,10 @@ DS_CHECKPOINT_URL="${DS_RELEASE_URL}/${DS_CHECKPOINT_FILE}"
 DS_MODEL_DATA_URL="${DS_RELEASE_URL}/${DS_MODEL_FILE}"
 
 echo "Getting checkpoint file."
-mkdir -p ${OUTPUT_PATH}
-curl -o ${OUTPUT_PATH}/${DS_CHECKPOINT_FILE} ${DS_CHECKPOINT_URL}
+mkdir -p ${OUTPUT_PATH} && cd ${OUTPUT_PATH}
+wget --no-verbose ${DS_CHECKPOINT_URL}
 echo "Getting model data file."
-curl -o ${OUTPUT_PATH}/${DS_MODEL_FILE} ${DS_MODEL_DATA_URL}
+wget --no-verbose ${DS_MODEL_DATA_URL}
 
 echo "Extracting files."
 cd ${OUTPUT_PATH}
@@ -36,5 +36,7 @@ echo "Removing archives."
 rm -f ./${DS_CHECKPOINT_FILE}
 rm -f ./${DS_MODEL_FILE}
 
+echo "Remove unnecessary files from models directory"
+rm -f ./models/output_graph.*
 
 cd ${BASE_PATH}
