@@ -23,9 +23,9 @@ DS_MODEL_DATA_URL="${DS_RELEASE_URL}/${DS_MODEL_FILE}"
 
 echo "Getting checkpoint file."
 mkdir -p ${OUTPUT_PATH}
-wget ${DS_CHECKPOINT_URL} -O ${OUTPUT_PATH}/${DS_CHECKPOINT_FILE}
+curl -o ${OUTPUT_PATH}/${DS_CHECKPOINT_FILE} ${DS_CHECKPOINT_URL}
 echo "Getting model data file."
-wget ${DS_MODEL_DATA_URL} -O ${OUTPUT_PATH}/${DS_MODEL_FILE}
+curl -o ${OUTPUT_PATH}/${DS_MODEL_FILE} ${DS_MODEL_DATA_URL}
 
 echo "Extracting files."
 cd ${OUTPUT_PATH}
