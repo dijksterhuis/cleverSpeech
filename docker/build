@@ -32,8 +32,10 @@ USER cleverspeech
 ENV CLEVERSPEECH_URL=https://github.com/dijksterhuis/cleverSpeech
 RUN git clone --recurse-submodules ${CLEVERSPEECH_URL} /home/cleverspeech/cleverSpeech
 
+# == Use multi-stage builds for large files or build steps where we only need the final ouput.
 
 #############################
+# large deepspeech files
 
 FROM base as dsdownloads
 USER cleverspeech
@@ -41,6 +43,7 @@ WORKDIR /home/cleverspeech/cleverSpeech
 RUN ./bin/deepspeech/get-model-files.sh
 
 #############################
+# common voice audio examples
 
 FROM base as csdownloads
 USER cleverspeech
@@ -48,6 +51,18 @@ WORKDIR /home/cleverspeech/cleverSpeech
 RUN ./bin/attacks/create-samples-dir.sh
 
 #############################
+# deepspeech ctc decoder
+
+FROM base as decoder
+# Build DeepSpeech decoder
+USER root
+WORKDIR /home/cleverspeech/cleverSpeech/models/DeepSpeech/src/native_client/ctcdecode
+RUN make bindings NUM_PROCESSES=4
+RUN cp -r /home/cleverspeech/cleverSpeech/models/DeepSpeech/src/native_client/ctcdecode/dist/ /home/cleverspeech/dist/
+
+
+#############################
+# install everything
 
 FROM base as installs
 
@@ -58,26 +73,20 @@ RUN pip3 install --upgrade --user -r ./reqs.txt
 
 COPY --from=dsdownloads /home/cleverspeech/cleverSpeech/models/DeepSpeech/data/ ./models/DeepSpeech/data/
 COPY --from=csdownloads /home/cleverspeech/cleverSpeech/samples/ ./samples/
+COPY --from=decoder /home/cleverspeech/dist/ ./dist/
+
+RUN pip3 install --user --force-reinstall ./dist/*.whl
 
 ENV PYTHONPATH="${PYTHONPATH}:$(pwd):$(pwd)/models/DeepSpeech/src"
 
-# Build DeepSpeech decoder
-USER root
-WORKDIR /home/cleverspeech/cleverSpeech/models/DeepSpeech/src/native_client/ctcdecode
-RUN make bindings NUM_PROCESSES=2
-
-USER cleverspeech
-RUN pip3 install --user --force-reinstall ./dist/*.whl
-
-# Entrypoints and clean up
-RUN rm -rf /tmp/*
-
 #############################
+# entrypoint setup
+# must be run as root so we can switch users and change file ownership at runtime
 
-FROM decoder
-
-# entrypoint must be run as root so we can switch users
+FROM installs
 USER root
+RUN rm -rf /tmp/*
+RUN rm -rf /home/cleverspeech/cleverSpeech/dist/
 COPY ./docker/entrypoint.sh /entrypoint.sh
 WORKDIR /home/cleverspeech/cleverSpeech
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
