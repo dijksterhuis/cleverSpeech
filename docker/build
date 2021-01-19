@@ -38,54 +38,35 @@ FROM base as downloads
 USER root
 RUN mkdir /data/ && chown $(id -u cleverspeech):$(id -g cleverspeech) /data/
 
-USER cleverspeech
-
-ARG DS_VERSION=0.4.1
-ENV DS_VERSION=${DS_VERSION}
-
-RUN mkdir -p /data/checkpoint
-RUN mkdir -p /data/models
-RUN mkdir -p /data/samples/all /data/samples/10 /data/samples/100 /data/samples/1000
-RUN mkdir -p /data/adv/
-
-COPY deepspeech-${DS_VERSION}-checkpoint/ /data/checkpoint/
-COPY models/ /data/models/
-
-# Be explicit about copying
-
-COPY samples/10/ /data/samples/10/
-COPY samples/100/ /data/samples/100/
-COPY samples/1000/ /data/samples/1000/
-COPY samples/all/ /data/samples/all/
-COPY samples/cv-valid-test.csv /data/samples/cv-valid-test.csv
-
-ENV DEEPSPEECH_CHECKPOINT_DIR=/data/checkpoint
-ENV DEEPSPEECH_MODEL_DIR=/data/models
-
-#############################
-
-FROM downloads as setup
-
 # Do cleverSpeech setup
 USER cleverspeech
 
 ENV CLEVERSPEECH_URL=https://github.com/dijksterhuis/cleverSpeech
-RUN git clone ${CLEVERSPEECH_URL} /home/cleverspeech/cleverSpeech
+RUN git clone --recurse-submodules ${CLEVERSPEECH_URL} /home/cleverspeech/cleverSpeech
 
 WORKDIR /home/cleverspeech/cleverSpeech
 
-RUN git checkout build && git pull
-RUN git submodule update --init --recursive
+RUN ./bin/deepspeech/get-model-files.sh
+RUN ./bin/attacks/create-samples-dir.sh
 
-RUN pip3 install --upgrade --user -r ./DeepSpeech/requirements.txt
+#############################
+
+FROM downloads as installs
+
+USER cleverspeech
+
+RUN pip3 install --upgrade --user -r ./models/*/src/requirements.txt
 RUN pip3 install --upgrade --user -r ./reqs.txt
 
-ENV DEEPSPEECH_SRC_DIR=/home/cleverspeech/cleverSpeech/DeepSpeech/
-ENV PYTHONPATH="${PYTHONPATH}:/home/cleverspeech/cleverSpeech"
+ENV PYTHONPATH="${PYTHONPATH}:$(pwd):$(pwd)/models/DeepSpeech/src"
 
-# Build decoder
+#############################
+
+FROM installs as decoder
+
+# Build DeepSpeech decoder
 USER root
-WORKDIR /home/cleverspeech/cleverSpeech/DeepSpeech/native_client/ctcdecode
+WORKDIR /home/cleverspeech/cleverSpeech/models/DeepSpeech/src/native_client/ctcdecode
 RUN make bindings NUM_PROCESSES=2
 
 USER cleverspeech
@@ -96,11 +77,12 @@ RUN rm -rf /tmp/*
 
 #############################
 
-FROM setup
+FROM decoder
 
-# entrypoint must be run as root
+# entrypoint must be run as root so we can switch users
 USER root
-COPY ./Dockerfiles/entrypoint.sh /entrypoint.sh
+COPY ./docker/entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
 
 WORKDIR /home/cleverspeech/cleverSpeech
+RUN ls -al /home/cleverspeech/cleverSpeech/
