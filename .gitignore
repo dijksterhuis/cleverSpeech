@@ -12,4 +12,4 @@ notes/
 *-logits/
 /experiments/*/data/
 /tmp/
-/models/*/data/
+/models/*/data/*
