@@ -1,18 +1,29 @@
 [submodule "cleverspeech/utils"]
 	path = cleverspeech/utils
 	url = ../cleverspeech-utils.git
+	branch = master
+
 [submodule "cleverspeech/eval"]
 	path = cleverspeech/eval
 	url = ../cleverspeech-eval.git
+	branch = master
+
 [submodule "cleverspeech/data"]
 	path = cleverspeech/data
 	url = ../cleverspeech-data.git
+	branch = master
+
 [submodule "cleverspeech/graph"]
 	path = cleverspeech/graph
 	url = ../cleverspeech-graph.git
+	branch = master
+
 [submodule "models/DeepSpeech"]
 	path = models/DeepSpeech
 	url = ../DeepSpeechAdversary.git
+	branch = adversarial-v0.4.1
+
 [submodule "experiments"]
 	path = experiments
 	url = ../cleverspeech-exp.git
+	branch = master
