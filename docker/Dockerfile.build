@@ -56,9 +56,9 @@ RUN ./bin/attacks/create-samples-dir.sh
 FROM base as decoder
 # Build DeepSpeech decoder
 USER root
-WORKDIR /home/cleverspeech/cleverSpeech/models/DeepSpeech/src/native_client/ctcdecode
+WORKDIR /home/cleverspeech/cleverSpeech/models/DeepSpeech_v041/src/native_client/ctcdecode
 RUN make bindings NUM_PROCESSES=4
-RUN cp -r /home/cleverspeech/cleverSpeech/models/DeepSpeech/src/native_client/ctcdecode/dist/ /home/cleverspeech/dist/
+RUN cp -r /home/cleverspeech/cleverSpeech/models/DeepSpeech_v041/src/native_client/ctcdecode/dist/ /home/cleverspeech/dist/
 
 
 #############################
@@ -71,13 +71,13 @@ WORKDIR /home/cleverspeech/cleverSpeech
 RUN pip3 install --upgrade --user -r ./models/*/src/requirements.txt
 RUN pip3 install --upgrade --user -r ./reqs.txt
 
-COPY --from=dsdownloads /home/cleverspeech/cleverSpeech/models/DeepSpeech/data/ ./models/DeepSpeech/data/
+COPY --from=dsdownloads /home/cleverspeech/cleverSpeech/models/DeepSpeech_v041/data/ ./models/DeepSpeech_v041/data/
 COPY --from=csdownloads /home/cleverspeech/cleverSpeech/samples/ ./samples/
 COPY --from=decoder /home/cleverspeech/dist/ ./dist/
 
 RUN pip3 install --user --force-reinstall ./dist/*.whl
 
-ENV PYTHONPATH="${PYTHONPATH}:$(pwd):$(pwd)/models/DeepSpeech/src"
+ENV PYTHONPATH="${PYTHONPATH}:$(pwd):$(pwd)/models/DeepSpeech_v041/src"
 
 #############################
 # entrypoint setup
