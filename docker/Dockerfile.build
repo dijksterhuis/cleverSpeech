@@ -6,6 +6,7 @@ USER root
 ENV USER=cleverspeech
 ENV USER_ID=9999
 ENV GROUP_ID=9999
+ENV CLEVERSPEECH_HOME="/home/${USER}/cleverSpeech/"
 
 RUN groupadd -g ${GROUP_ID} ${USER}
 RUN useradd -m ${USER} -g ${GROUP_ID} -u ${USER_ID}
@@ -30,7 +31,7 @@ RUN apt install -y \
 RUN ln -s /usr/bin/llvm-config-8 /usr/bin/llvm-config
 USER cleverspeech
 ENV CLEVERSPEECH_URL=https://github.com/dijksterhuis/cleverSpeech
-RUN git clone --recurse-submodules ${CLEVERSPEECH_URL} /home/cleverspeech/cleverSpeech
+RUN git clone --recurse-submodules ${CLEVERSPEECH_URL} ${CLEVERSPEECH_HOME}
 
 # == Use multi-stage builds for large files or build steps where we only need the final ouput.
 
@@ -39,7 +40,7 @@ RUN git clone --recurse-submodules ${CLEVERSPEECH_URL} /home/cleverspeech/clever
 
 FROM base as dsdownloads
 USER cleverspeech
-WORKDIR /home/cleverspeech/cleverSpeech
+WORKDIR ${CLEVERSPEECH_HOME}
 RUN ./bin/deepspeech/get-v041-model-files.sh
 
 #############################
@@ -47,7 +48,7 @@ RUN ./bin/deepspeech/get-v041-model-files.sh
 
 FROM base as csdownloads
 USER cleverspeech
-WORKDIR /home/cleverspeech/cleverSpeech
+WORKDIR ${CLEVERSPEECH_HOME}
 RUN ./bin/attacks/create-samples-dir.sh
 
 #############################
@@ -56,9 +57,9 @@ RUN ./bin/attacks/create-samples-dir.sh
 FROM base as decoder
 # Build DeepSpeech decoder
 USER root
-WORKDIR /home/cleverspeech/cleverSpeech/models/DeepSpeech_v041/src/native_client/ctcdecode
+WORKDIR ${CLEVERSPEECH_HOME}/models/DeepSpeech_v041/src/native_client/ctcdecode
 RUN make bindings NUM_PROCESSES=4
-RUN cp -r /home/cleverspeech/cleverSpeech/models/DeepSpeech_v041/src/native_client/ctcdecode/dist/ /home/cleverspeech/dist/
+RUN cp -r ${CLEVERSPEECH_HOME}/models/DeepSpeech_v041/src/native_client/ctcdecode/dist/ /home/cleverspeech/dist/
 
 
 #############################
@@ -67,17 +68,17 @@ RUN cp -r /home/cleverspeech/cleverSpeech/models/DeepSpeech_v041/src/native_clie
 FROM base as installs
 
 USER cleverspeech
-WORKDIR /home/cleverspeech/cleverSpeech
+WORKDIR ${CLEVERSPEECH_HOME}
 RUN pip3 install --upgrade --user -r ./models/*/src/requirements.txt
 RUN pip3 install --upgrade --user -r ./reqs.txt
 
-COPY --from=dsdownloads /home/cleverspeech/cleverSpeech/models/DeepSpeech_v041/data/ ./models/DeepSpeech_v041/data/
-COPY --from=csdownloads /home/cleverspeech/cleverSpeech/samples/ ./samples/
+COPY --from=dsdownloads ${CLEVERSPEECH_HOME}/models/DeepSpeech_v041/data/ ./models/DeepSpeech_v041/data/
+COPY --from=csdownloads ${CLEVERSPEECH_HOME}/samples/ ./samples/
 COPY --from=decoder /home/cleverspeech/dist/ ./dist/
 
 RUN pip3 install --user --force-reinstall ./dist/*.whl
 
-ENV PYTHONPATH="${PYTHONPATH}:$(pwd):$(pwd)/models/DeepSpeech_v041/src"
+ENV PYTHONPATH="${PYTHONPATH}:/home/cleverspeech/cleverSpeech/models/DeepSpeech_v041/src/"
 
 #############################
 # entrypoint setup
@@ -86,7 +87,7 @@ ENV PYTHONPATH="${PYTHONPATH}:$(pwd):$(pwd)/models/DeepSpeech_v041/src"
 FROM installs
 USER root
 RUN rm -rf /tmp/*
-RUN rm -rf /home/cleverspeech/cleverSpeech/dist/
+RUN rm -rf ${CLEVERSPEECH_HOME}/dist/
 COPY ./docker/entrypoint.sh /entrypoint.sh
 WORKDIR /home/cleverspeech/cleverSpeech
 ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
