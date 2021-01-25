@@ -3,7 +3,7 @@ pipeline {
     environment {
         BASE_IMAGE = "tensorflow/tensorflow:1.13.1-gpu-py3"
         IMAGE_NAME = "dijksterhuis/cleverspeech"
-        BUILD_TAG = "build"
+        BUILD_TAG = "master"
         OUTPUT_IMAGE = "${IMAGE_NAME}:${BUILD_TAG}"
     }
 
