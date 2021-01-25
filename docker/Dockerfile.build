@@ -35,12 +35,12 @@ RUN git clone --recurse-submodules ${CLEVERSPEECH_URL} /home/cleverspeech/clever
 # == Use multi-stage builds for large files or build steps where we only need the final ouput.
 
 #############################
-# large deepspeech files
+# large deepspeech v0.4.1 files
 
-FROM base as dsdownloads
+FROM base as ds041downloads
 USER cleverspeech
 WORKDIR /home/cleverspeech/cleverSpeech
-RUN ./bin/deepspeech/get-model-files.sh
+RUN ./bin/deepspeech/get-v041-model-files.sh
 
 #############################
 # common voice audio examples

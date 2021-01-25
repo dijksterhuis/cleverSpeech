@@ -3,13 +3,13 @@
 export DS_VERSION="0.4.1"
 DS_RELEASE_URL="https://github.com/mozilla/DeepSpeech/releases/download/v${DS_VERSION}"
 BASE_PATH=$(pwd)
-OUTPUT_PATH="${BASE_PATH}/models/DeepSpeech/data/"
+OUTPUT_PATH="${BASE_PATH}/models/DeepSpeech_v041/data/"
 
 
 if [[ $(basename ${BASE_PATH}) != "cleverSpeech" ]]
 then
     echo "Script must be run from the root of the cleverSpeech directory."
-    echo "Like so: ./bin/deepspeech/get-model-files.sh"
+    echo "Like so: ./bin/deepspeech/get-v041-model-files.sh"
     echo "You are currently in $(pwd)"
     echo "Quitting. "
     exit
