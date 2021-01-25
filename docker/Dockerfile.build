@@ -37,7 +37,7 @@ RUN git clone --recurse-submodules ${CLEVERSPEECH_URL} /home/cleverspeech/clever
 #############################
 # large deepspeech v0.4.1 files
 
-FROM base as ds041downloads
+FROM base as dsdownloads
 USER cleverspeech
 WORKDIR /home/cleverspeech/cleverSpeech
 RUN ./bin/deepspeech/get-v041-model-files.sh

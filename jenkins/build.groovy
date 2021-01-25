@@ -23,6 +23,16 @@ pipeline {
             }
         }
 
+        stage("Pull tensorflow image.") {
+            steps {
+                script {
+                    withDockerRegistry([ credentialsId: "dhub-mr", url: "" ]) {
+                        sh "docker pull ${BASE_IMAGE}"
+                    }
+                }
+            }
+        }
+
         stage("Build base image.") {
             steps {
                 script {
