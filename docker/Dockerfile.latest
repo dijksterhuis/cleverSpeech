@@ -1,6 +1,8 @@
 FROM dijksterhuis/cleverspeech:build
 
 USER cleverspeech
-RUN git checkout master && git pull
+RUN git checkout master \
+    && git pull --recurse-submodules \
+    && git submodule foreach "git checkout master && git pull"
 
 USER root
