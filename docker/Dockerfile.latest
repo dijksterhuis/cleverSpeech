@@ -1,8 +1,15 @@
 FROM dijksterhuis/cleverspeech:build
 
 USER cleverspeech
-RUN git checkout master \
-    && git pull --recurse-submodules \
-    && git submodule foreach "git checkout master && git pull"
+RUN echo "Checking out master for ./" \
+    && git checkout master && git pull \
+    && echo "Checking out master for ./cleverspeech" \
+    && cd ./cleverspeech && git checkout master && git pull && cd ../ \
+    && echo "Checking out master for ./experiments" \
+    && cd ./experiments && git checkout master && git pull && cd ../ \
+    && echo "Checking out adversarial-v0.4.1 for ./models/DeepSpeech_v041" \
+    && cd ./models/DeepSpeech_v041/src/ && git checkout adversarial-v0.4.1 && git pull && cd ../../ \
+    && echo "Completed checkouts."
+
 
 USER root
