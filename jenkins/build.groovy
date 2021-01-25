@@ -3,7 +3,8 @@ pipeline {
     environment {
         BASE_IMAGE = "tensorflow/tensorflow:1.13.1-gpu-py3"
         IMAGE_NAME = "dijksterhuis/cleverspeech"
-        BUILD_TAG = "master"
+        GITHUB_BRANCH = "master"
+        BUILD_TAG = "build"
         OUTPUT_IMAGE = "${IMAGE_NAME}:${BUILD_TAG}"
     }
 
@@ -18,7 +19,7 @@ pipeline {
 
         stage('Checkout vcs.') {
             steps {
-                git branch: "${BRANCH}", credentialsId: 'git-mr', url: 'https://github.com/dijksterhuis/cleverSpeech.git'
+                git branch: "${GITHUB_BRANCH}", credentialsId: 'git-mr', url: 'https://github.com/dijksterhuis/cleverSpeech.git'
             }
         }
 
