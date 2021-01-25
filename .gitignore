@@ -13,3 +13,5 @@ notes/
 /experiments/*/data/
 /tmp/
 /models/*/data/*
+*.csv
+*.json
