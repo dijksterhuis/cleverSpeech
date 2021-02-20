@@ -16,3 +16,4 @@ notes/
 *.csv
 *.json
 *tmp*
+/scratch/
