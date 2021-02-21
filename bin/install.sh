@@ -33,7 +33,7 @@ echo "++ | Getting DeepSpeech files..."
 echo "-- | Done."
 
 echo "++ | Getting Common Voice files..."
-./bin/attacks/create-samples-dir.sh
+./bin/attack-prep/create-samples-dir.sh
 echo "-- | Done."
 
 echo "-------------------------------------------------"
