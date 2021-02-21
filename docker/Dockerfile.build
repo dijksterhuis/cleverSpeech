@@ -49,7 +49,7 @@ RUN ./bin/deepspeech/get-v041-model-files.sh
 FROM base as csdownloads
 USER cleverspeech
 WORKDIR ${CLEVERSPEECH_HOME}
-RUN ./bin/attacks/create-samples-dir.sh
+RUN ./bin/mcv/create-samples-dir.sh
 
 #############################
 # deepspeech ctc decoder
@@ -78,7 +78,7 @@ COPY --from=decoder /home/cleverspeech/dist/ ./dist/
 
 RUN pip3 install --user --force-reinstall ./dist/*.whl
 
-ENV PYTHONPATH="${PYTHONPATH}:/home/cleverspeech/cleverSpeech/models/DeepSpeech_v041/src/"
+ENV PYTHONPATH="${PYTHONPATH}:${CLEVERSPEECH_HOME}:/home/cleverspeech/cleverSpeech/models/DeepSpeech_v041/src/"
 
 #############################
 # entrypoint setup

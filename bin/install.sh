@@ -9,17 +9,6 @@ then
     exit
 fi
 
-echo "++ | Adding cleverSpeech to your PYTHONPATH..."
-export PYTHONPATH="${PYTHONPATH}:$(pwd)"
-echo "-- | Done."
-
-echo "++ | Adding models to your PYTHONPATH..."
-for model_dir in ./models/*/src/
-do
-    export PYTHONPATH="${PYTHONPATH}:$(pwd)/${model_dir}"
-done
-echo "-- | Done."
-
 echo "++ | Installing cleverSpeech python dependencies..."
 python3 -m pip install --upgrade --requirement ./reqs.txt
 echo "-- | Done."
@@ -32,8 +21,8 @@ echo "++ | Getting DeepSpeech files..."
 ./bin/deepspeech/get_model_files.sh
 echo "-- | Done."
 
-echo "++ | Getting Common Voice files..."
-./bin/attack-prep/create-samples-dir.sh
+echo "++ | Getting pre-processed Common Voice files from AWS..."
+./bin/mcv/create-samples-dir.sh
 echo "-- | Done."
 
 echo "-------------------------------------------------"
