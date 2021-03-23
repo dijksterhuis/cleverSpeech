@@ -101,5 +101,5 @@ WORKDIR /home/cleverspeech/cleverSpeech
 # - https://github.com/krallin/tini#process-group-killing
 
 # entrypoint handles the UID and GID switching for deepspeech model files and output directories etc
-ENTRYPOINT ["tini", "-g", "--", "/entrypoint.sh"]
+ENTRYPOINT ["/tini", "-g", "--", "/entrypoint.sh"]
 
