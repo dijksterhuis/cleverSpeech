@@ -17,6 +17,7 @@ pipeline {
             steps {
                 sh "docker image prune -f"
                 sh "docker container prune -f"
+                sh "docker builder prune -f"
             }
         }
 
@@ -67,6 +68,7 @@ pipeline {
         always {
             sh "docker image prune -f"
             sh "docker container prune -f"
+            sh "docker builder prune -f"
             sh "docker image rm ${BASE_IMAGE}"
         }
     }
