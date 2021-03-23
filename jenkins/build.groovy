@@ -1,5 +1,8 @@
 pipeline {
-    agent any
+
+    /* run on a gpu machine because the build machine (rhea) has low root disk space */
+    agent { label 'gpu' }
+
     environment {
         BASE_IMAGE = "tensorflow/tensorflow:1.13.1-gpu-py3"
         IMAGE_NAME = "dijksterhuis/cleverspeech"
