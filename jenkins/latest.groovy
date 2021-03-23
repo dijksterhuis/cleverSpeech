@@ -11,8 +11,8 @@ pipeline {
 
         stage('Clean up before we start.') {
             steps {
-                sh "docker image prune -f"
                 sh "docker container prune -f"
+                sh "docker image prune -f"
                 sh "docker builder prune -f"
             }
         }
@@ -52,8 +52,8 @@ pipeline {
     }
     post  {
         always {
-            sh "docker image prune -f"
             sh "docker container prune -f"
+            sh "docker image prune -f"
             sh "docker builder prune -f"
             sh "docker image rm ${IMAGE_NAME}:${BUILD_TAG}"
             sh "docker image rm ${IMAGE_NAME}:${TAG}"
