@@ -29,6 +29,12 @@ RUN apt install -y \
 # https://askubuntu.com/questions/1286131/how-do-i-install-llvm-10-on-ubuntu-18-04/1286132
 # but with llvm version 8
 RUN ln -s /usr/bin/llvm-config-8 /usr/bin/llvm-config
+
+# Use tini becuase we can encounter zombie processes that mean docker containers refuse to exit.
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+
 USER cleverspeech
 ENV CLEVERSPEECH_URL=https://github.com/dijksterhuis/cleverSpeech
 RUN git clone --recurse-submodules ${CLEVERSPEECH_URL} ${CLEVERSPEECH_HOME}
@@ -90,5 +96,10 @@ RUN rm -rf /tmp/*
 RUN rm -rf ${CLEVERSPEECH_HOME}/dist/
 COPY ./docker/entrypoint.sh /entrypoint.sh
 WORKDIR /home/cleverspeech/cleverSpeech
-ENTRYPOINT ["/bin/bash", "/entrypoint.sh"]
+
+# Use -g to kill entire process groups when terminating:
+# - https://github.com/krallin/tini#process-group-killing
+
+# entrypoint handles the UID and GID switching for deepspeech model files and output directories etc
+ENTRYPOINT ["tini", "-g", "--", "/entrypoint.sh"]
 
