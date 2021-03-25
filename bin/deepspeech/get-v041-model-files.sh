@@ -36,7 +36,4 @@ echo "Removing archives."
 rm -f ./${DS_CHECKPOINT_FILE}
 rm -f ./${DS_MODEL_FILE}
 
-echo "Remove unnecessary files from models directory"
-rm -f ./models/output_graph.*
-
 cd ${BASE_PATH}
