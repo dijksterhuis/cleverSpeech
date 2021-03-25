@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'cpu' }
     environment {
         IMAGE_NAME = "dijksterhuis/cleverspeech"
         BUILD_TAG = "build"
