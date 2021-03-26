@@ -3,6 +3,7 @@ venv
 .idea
 *.pyc
 sample*
+silence*
 *example.wav
 *delta.wav
 *adv*
@@ -17,3 +18,4 @@ notes/
 *.json
 *tmp*
 /scratch/*
+*.tar*
