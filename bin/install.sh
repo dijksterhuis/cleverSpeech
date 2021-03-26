@@ -28,3 +28,5 @@ echo "-- | Done."
 echo "-------------------------------------------------"
 echo "You should be ready to run one of the experiments from the ./experiments directory:"
 find ./experiments | grep attacks.py
+
+echo "... Once you run this command: source ./bin/attacks/env.sh"
