@@ -51,7 +51,7 @@ python3 ./experiments/CTCBaselines/attacks.py ctc --max_examples 1 --batch_size 
 
 If you want to run the container as your user and group ID you'll need to some extra arguments so
 that the container can change the deepspeech checkpoint, language model, trie etc. file permissions:
-```
+```bash
 # You will need to wait a few minutes for file permissions to propagate
 docker run \
     -it \
@@ -86,7 +86,7 @@ cd ./cleverSpeech/ && ./bin/install.sh
 ```
 
 Then run an experiment:
-```python
+```bash
 python3 ./experiments/CTCBaselines/attacks.py ctc --max_examples 1 --batch_size 1 --max_spawns 1
 ```
 
