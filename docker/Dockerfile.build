@@ -100,6 +100,9 @@ WORKDIR /home/cleverspeech/cleverSpeech
 # Use -g to kill entire process groups when terminating:
 # - https://github.com/krallin/tini#process-group-killing
 
+# Use -s to do sub-reaping as tini will not be PID 1 if we use --pid=host at runtime.
+# https://github.com/krallin/tini#subreaping
+
 # entrypoint handles the UID and GID switching for deepspeech model files and output directories etc
-ENTRYPOINT ["/tini", "-g", "--", "/entrypoint.sh"]
+ENTRYPOINT ["/tini", "-s", "-g", "--", "/entrypoint.sh"]
 
