@@ -2,7 +2,7 @@
 # DeepSpeech 0.4.1 requirements. It still works 
 # and we can use the `tf.signal` library.
 tensorflow-gpu==1.13.1
-deepspeech-gpu=0.4.1
+deepspeech-gpu==0.4.1
 soundfile
 py3nvml
 git+https://github.com/endolith/waveform_analysis.git@master#egg=waveform_analysis
