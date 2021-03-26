@@ -1,11 +1,7 @@
 # cleverSpeech
 
-Code to generate adversarial examples (confidence/evasion attacks) for automatic speech recognition
-models in tensorflow. Began as a modified version of [Carlini and Wagner's Attacks][0] against
-[Mozilla STT][1].
-
-Mainly used to prototype and evaluate attacks, so if you're looking for production ready code then
-this might not be the repo for you.
+Code to generate adversarial examples (confidence/synthesis based evasion attacks) for
+[Mozilla STT][1]. Began as a modified version of [Carlini and Wagner's Attacks][0].
 
 This is the main repo used to create the released docker images. Everything is glued together with
 git submodules (helps me to work on code in separation, rather than making major changes and causing
@@ -13,6 +9,9 @@ spaghetti code to fly everywhere).
 
 If you want to see the package in action, grab a docker image or clone this repo using the steps
 outlined below.
+
+Why did I go off and basically rewrite something like [cleverhans](https://github.com/cleverhas/cleverhans)
+from scratch? See [WHY.md](./WHY.md).
 
 ### cleverSpeech top-level project structure
 
