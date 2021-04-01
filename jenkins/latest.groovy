@@ -6,7 +6,15 @@ pipeline {
         BRANCH = "master"
         TAG = "latest"
     }
-
+    options {
+        timestamps()
+        disableResume()
+        disableConcurrentBuilds()
+    }
+    triggers {
+        pollSCM('@daily) }
+        upstream(upstreamProjects: './build/base', threshold: hudson.model.Result.SUCCESS) }
+    }
     stages {
 
         stage('Clean up before we start.') {

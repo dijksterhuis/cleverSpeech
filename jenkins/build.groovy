@@ -10,7 +10,14 @@ pipeline {
         BUILD_TAG = "build"
         OUTPUT_IMAGE = "${IMAGE_NAME}:${BUILD_TAG}"
     }
-
+    options {
+        timestamps()
+        disableResume()
+        disableConcurrentBuilds()
+    }
+    triggers {
+        pollSCM('@daily) }
+    }
     stages {
 
         stage('Clean up before we start.') {
