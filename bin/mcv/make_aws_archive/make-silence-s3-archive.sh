@@ -8,7 +8,7 @@ then
   exit
 fi
 
-mkdir -p ./silence/wavs
+mkdir -p ./silence/all
 
 echo "Create silence files."
 python3 ./bin/mcv/make_aws_archive/make_silence.py ./silence/all
