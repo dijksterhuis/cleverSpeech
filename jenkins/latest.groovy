@@ -13,7 +13,7 @@ pipeline {
     }
     triggers {
         pollSCM('@daily')
-        upstream(upstreamProjects: './build/base', threshold: hudson.model.Result.SUCCESS)
+        upstream(upstreamProjects: './base', threshold: hudson.model.Result.SUCCESS)
     }
     stages {
 
