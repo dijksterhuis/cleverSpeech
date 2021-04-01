@@ -12,8 +12,8 @@ pipeline {
         disableConcurrentBuilds()
     }
     triggers {
-        pollSCM('@daily) }
-        upstream(upstreamProjects: './build/base', threshold: hudson.model.Result.SUCCESS) }
+        pollSCM('@daily')
+        upstream(upstreamProjects: './build/base', threshold: hudson.model.Result.SUCCESS)
     }
     stages {
 

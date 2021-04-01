@@ -16,7 +16,7 @@ pipeline {
         disableConcurrentBuilds()
     }
     triggers {
-        pollSCM('@daily) }
+        pollSCM('@daily')
     }
     stages {
 
