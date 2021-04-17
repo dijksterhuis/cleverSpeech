@@ -85,7 +85,7 @@ def main(wav_dir, trans_file_path):
         random scripts you downloaded from the internets.
         """
     )
-    for i in range(10, 1, -1):
+    for i in range(10, -1, -1):
         s = "You have {} seconds until changes are made.".format(i)
         print(s)
         time.sleep(1)
@@ -114,7 +114,7 @@ def main(wav_dir, trans_file_path):
         wavs
     )
 
-    print("Pre-processing done... Writing over existing files.")
+    print("\n\nPre-processing done... Writing over existing files.")
 
     bar = progressbar.progressbar(zip(abs_paths, wavs))
 
@@ -123,24 +123,21 @@ def main(wav_dir, trans_file_path):
         path, wav = file_data
 
         path_no_ext = path.rstrip(".wav")
-        basename_full = os.path.basename(path)
         basename_no_ext = os.path.basename(path_no_ext)
 
-        json_path = path_no_ext + ".json"
+        metadata_json_path = path_no_ext + ".json"
 
         true_trans = transcription_mapping[basename_no_ext]
         n_samples = wav.size
 
         json_data = [
             {
-                "wav": wav.tolist(),
                 "correct_transcription": true_trans,
                 "n_samples": int(n_samples),
-                "basenames": basename_full,
             }
         ]
 
-        with open(json_path, "w+") as f:
+        with open(metadata_json_path, "w+") as f:
 
             # save disk space in json by not using *any* delimiter whitespace
             json.dump(json_data, f, separators=(',', ':'))
