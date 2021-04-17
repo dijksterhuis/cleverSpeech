@@ -2,12 +2,15 @@
 
 import os
 import sys
+import json
+import time
 import librosa
 import soundfile
+import progressbar
 
 import numpy as np
 
-BIT_DEPTH = 2 ** 15 - 1
+BIT_DEPTH = 2 ** 15
 
 
 def l_map(f, x):
@@ -18,7 +21,7 @@ def load_wav(fp, dtype):
     audio, sample_rate = soundfile.read(fp, dtype=dtype)
     audio = audio.astype(np.float32)
     try:
-        assert min(audio) >= -2**15 and max(audio) <= 2**15 - 1
+        assert min(audio) >= -BIT_DEPTH and max(audio) <= BIT_DEPTH - 1
     except AssertionError as e:
         err = "Problem with source file resolution:\n"
         err += "min(audio)={}\n".format(min(audio))
@@ -51,7 +54,27 @@ def amplitude_normalisation(x):
     return x * BIT_DEPTH * 0.5 / norm
 
 
-def main(indir):
+def load_transcriptions(csv_file_path):
+
+    with open(csv_file_path, 'r') as f:
+        rows = f.readlines()[1:]
+
+    def get_sample_basename_key(split_row):
+        return split_row[0].replace("cv-valid-test/", '').replace(".mp3", '')
+
+    def get_sample_transcription(split_row):
+        return split_row[1]
+
+    rows = [row.split(',') for row in rows]
+
+    sample_trans_map = {
+        get_sample_basename_key(r): get_sample_transcription(r) for r in rows
+    }
+
+    return sample_trans_map
+
+
+def main(wav_dir, trans_file_path):
 
     print(
         """
@@ -62,13 +85,22 @@ def main(indir):
         random scripts you downloaded from the internets.
         """
     )
+    for i in range(10, 1, -1):
+        s = "You have {} seconds until changes are made.".format(i)
+        print(s)
+        time.sleep(1)
+
+    transcription_mapping = load_transcriptions(trans_file_path)
 
     abs_paths = l_map(
         lambda fp: os.path.abspath(os.path.join(indir, fp)),
-        os.listdir(indir)
+        os.listdir(wav_dir)
     )
 
-    wavs = load_wavs(abs_paths, "int16")
+    abs_wav_file_paths = [x for x in abs_paths if not os.path.isdir(x) and ".wav" in x]
+
+    wavs = load_wavs(abs_wav_file_paths, "int16")
+
     wavs = l_map(
         lambda x: amplitude_normalisation(x),
         wavs
@@ -84,11 +116,39 @@ def main(indir):
 
     print("Pre-processing done... Writing over existing files.")
 
-    for path, wav in zip(abs_paths, wavs):
+    bar = progressbar.progressbar(zip(abs_paths, wavs))
+
+    for file_data in bar:
+
+        path, wav = file_data
+
+        path_no_ext = path.rstrip(".wav")
+        basename_full = os.path.basename(path)
+        basename_no_ext = os.path.basename(path_no_ext)
+
+        json_path = path_no_ext + ".json"
+
+        true_trans = transcription_mapping[basename_no_ext]
+        n_samples = wav.size
+
+        json_data = [
+            {
+                "wav": wav.tolist(),
+                "correct_transcription": true_trans,
+                "n_samples": int(n_samples),
+                "basenames": basename_full,
+            }
+        ]
+
+        with open(json_path, "w+") as f:
+
+            # save disk space in json by not using *any* delimiter whitespace
+            json.dump(json_data, f, separators=(',', ':'))
+
         soundfile.write(path, wav, 16000, subtype="PCM_16", format="WAV")
 
 
 if __name__ == '__main__':
-    indir = sys.argv[1]
-    main(indir)
+    indir, transcript_file_path = sys.argv[1:]
+    main(indir, transcript_file_path)
 
