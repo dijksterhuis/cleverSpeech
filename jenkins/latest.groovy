@@ -5,6 +5,7 @@ pipeline {
         BUILD_TAG = "build"
         BRANCH = "master"
         TAG = "latest"
+        COMMIT_HASH
     }
     options {
         timestamps()
@@ -27,7 +28,9 @@ pipeline {
 
         stage('Checkout vcs.') {
             steps {
-                git branch: "${BRANCH}", credentialsId: 'git-mr', url: 'https://github.com/dijksterhuis/cleverSpeech.git'
+                git branch: "${BRANCH}",
+                    credentialsId: 'git-mr',
+                    url: 'https://github.com/dijksterhuis/cleverSpeech.git'
             }
         }
 
@@ -43,6 +46,10 @@ pipeline {
                         --no-cache \
                         .
 
+                        docker tag \
+                            ${IMAGE_NAME}:${TAG} \
+                            ${IMAGE_NAME}:${GIT_COMMIT}
+
                     """
                 }
             }
@@ -52,7 +59,10 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry([ credentialsId: "dhub-mr", url: "" ]) {
-                        sh "docker push ${IMAGE_NAME}:${TAG}"
+                        sh """
+                            docker push ${IMAGE_NAME}:${TAG}
+                            docker push ${IMAGE_NAME}:${GIT_COMMIT}
+                        """
                     }
                 }
             }
