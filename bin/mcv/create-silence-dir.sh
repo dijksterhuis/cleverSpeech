@@ -17,5 +17,5 @@ echo "Extracting silence archive."
 tar -xzf ./silence.tar.gz \
  && echo "Extraction successful."
 
-echo "====>: Data prep script completed. <===="
+echo "====>: ./silence/ prep script completed. <===="
 

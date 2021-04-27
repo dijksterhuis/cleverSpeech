@@ -20,17 +20,4 @@ echo "Extracting samples archive."
 tar -xzf ./samples.tar.gz \
     && echo "Extraction successful."
 
-if [[ -f silence.tar.gz ]]
-then
-    echo "silence.tar.gz archive exists so skipping download"
-else
-    echo "Getting silence archive."
-    curl -o ./silence.tar.gz ${SAMPLES_URL} \
-        && echo "Got silence archive."
-fi
-
-echo "Extracting silence archive."
-tar -xzf ./silence.tar.gz \
-    && echo "Extraction successful."
-
-echo "====>: Data prep script completed. <===="
+echo "====>: ./samples/ prep script completed. <===="
