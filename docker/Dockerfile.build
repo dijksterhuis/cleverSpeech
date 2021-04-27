@@ -11,8 +11,8 @@ ENV CLEVERSPEECH_HOME="/home/${USER}/cleverSpeech/"
 RUN groupadd -g ${GROUP_ID} ${USER}
 RUN useradd -m ${USER} -g ${GROUP_ID} -u ${USER_ID}
 
-RUN apt update
-RUN apt install -y \
+RUN apt update \
+ && apt install -y \
 	git \
 	curl \
 	wget \
@@ -24,7 +24,10 @@ RUN apt install -y \
 	nano \
 	sudo \
 	python3 \
-	llvm-8*
+	llvm-8* \
+ && apt clean \
+ && rm -rf /var/lib/apt/lists/* \
+ && apt autoremove -yqq
 
 # https://askubuntu.com/questions/1286131/how-do-i-install-llvm-10-on-ubuntu-18-04/1286132
 # but with llvm version 8
