@@ -5,7 +5,6 @@ pipeline {
         BUILD_TAG = "build"
         BRANCH = "master"
         TAG = "latest"
-        COMMIT_HASH
     }
     options {
         timestamps()
