@@ -61,6 +61,7 @@ pipeline {
                         sh """
                             docker push ${IMAGE_NAME}:${TAG}
                             docker push ${IMAGE_NAME}:${GIT_COMMIT}
+                            docker image rm ${IMAGE_NAME}:${TAG} ${IMAGE_NAME}:${GIT_COMMIT}
                         """
                     }
                 }
@@ -72,7 +73,6 @@ pipeline {
             sh "docker container prune -f"
             sh "docker image prune -f"
             sh "docker builder prune -f"
-            sh "docker image rm ${IMAGE_NAME}:${TAG}"
         }
     }
 }
