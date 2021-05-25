@@ -52,6 +52,7 @@ pipeline {
                         DOCKER_BUILDKIT=1 docker build \
                         -t ${OUTPUT_IMAGE} \
                         -f ./docker/Dockerfile.build \
+                        --pull \
                         --force-rm \
                         --no-cache \
                         .

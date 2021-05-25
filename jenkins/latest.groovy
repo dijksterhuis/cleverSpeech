@@ -41,6 +41,7 @@ pipeline {
                         DOCKER_BUILDKIT=1 docker build \
                         -t ${IMAGE_NAME}:${TAG} \
                         -f ./docker/Dockerfile.latest \
+                        --pull \
                         --force-rm \
                         --no-cache \
                         .
