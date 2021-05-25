@@ -79,15 +79,15 @@ FROM base as installs
 
 USER cleverspeech
 WORKDIR ${CLEVERSPEECH_HOME}
-RUN pip3 install --upgrade --user -r ./models/*/src/requirements.txt
-RUN pip3 install --upgrade --user -r ./reqs.txt
+RUN python3 -m pip install --upgrade --user -r ./models/*/src/requirements.txt
+RUN python3 -m pip install --upgrade --user -r ./reqs.txt
 
 COPY --from=dsdownloads ${CLEVERSPEECH_HOME}/models/DeepSpeech_v041/data/ ./models/DeepSpeech_v041/data/
 COPY --from=csdownloads ${CLEVERSPEECH_HOME}/samples/ ./samples/
 COPY --from=csdownloads ${CLEVERSPEECH_HOME}/silence/ ./silence/
 COPY --from=decoder /home/cleverspeech/dist/ ./dist/
 
-RUN pip3 install --user --force-reinstall ./dist/*.whl
+RUN python3 -m pip install --user --force-reinstall ./dist/*.whl
 
 ENV PYTHONPATH="${PYTHONPATH}:${CLEVERSPEECH_HOME}:/home/cleverspeech/cleverSpeech/models/DeepSpeech_v041/src/"
 
