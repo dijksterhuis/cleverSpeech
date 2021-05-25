@@ -84,6 +84,7 @@ RUN pip3 install --upgrade --user -r ./reqs.txt
 
 COPY --from=dsdownloads ${CLEVERSPEECH_HOME}/models/DeepSpeech_v041/data/ ./models/DeepSpeech_v041/data/
 COPY --from=csdownloads ${CLEVERSPEECH_HOME}/samples/ ./samples/
+COPY --from=csdownloads ${CLEVERSPEECH_HOME}/silence/ ./silence/
 COPY --from=decoder /home/cleverspeech/dist/ ./dist/
 
 RUN pip3 install --user --force-reinstall ./dist/*.whl
