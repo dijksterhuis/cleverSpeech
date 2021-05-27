@@ -13,6 +13,8 @@ notes/
 *-logits/
 /experiments/*/data/
 /tmp/
+/models/
+!/models/DeepSpeech_v041/
 /models/*/data/*
 *.csv
 *.json
