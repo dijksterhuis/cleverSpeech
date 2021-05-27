@@ -17,7 +17,7 @@ def main(tokens=" abcdefghijklmnopqrstuvwxyz'-"):
     settings = {
         "audio_indir": "./samples/all/",
         "max_examples": None,
-        "max_audio_length": None,
+        "max_audio_file_bytes": None,
         "targets_path": "./samples/cv-valid-test.csv",
         "max_targets": 2000,
         "batch_size": 10,
