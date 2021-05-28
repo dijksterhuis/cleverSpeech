@@ -26,3 +26,6 @@ python_speech_features
 # Graphs n stuff
 matplotlib
 argparse
+
+# aws
+boto3
