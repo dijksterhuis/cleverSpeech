@@ -46,6 +46,8 @@ pipeline {
                         --no-cache \
                         .
 
+                        COMMIT_SHORT="$(git rev-parse --short HEAD)"
+
                         docker tag \
                             ${IMAGE_NAME}:${TAG} \
                             ${IMAGE_NAME}:${GIT_COMMIT}
