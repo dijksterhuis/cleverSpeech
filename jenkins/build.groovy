@@ -74,10 +74,12 @@ pipeline {
     }
     post  {
         always {
-            sh "docker container prune -f"
-            sh "docker image prune -f"
-            sh "docker builder prune -f"
-            sh "docker image rm ${OUTPUT_IMAGE}"
+            lock("docker cleanup") {
+                sh "docker container prune -f"
+                sh "docker image prune -f"
+                sh "docker builder prune -f"
+                sh "docker image rm ${OUTPUT_IMAGE}"
+            }
         }
     }
 }
