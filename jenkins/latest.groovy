@@ -19,9 +19,11 @@ pipeline {
 
         stage('Clean up before we start.') {
             steps {
-                sh "docker container prune -f"
-                sh "docker image prune -f"
-                sh "docker builder prune -f"
+                lock("docker cleanup") {
+                    sh "docker container prune -f"
+                    sh "docker image prune -f"
+                    sh "docker builder prune -f"
+                }
             }
         }
 
