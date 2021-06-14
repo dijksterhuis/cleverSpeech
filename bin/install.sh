@@ -22,11 +22,11 @@ echo "++ | Getting DeepSpeech files..."
 echo "-- | Done."
 
 echo "++ | Getting pre-processed Common Voice files from AWS..."
-./bin/mcv/create-samples-dir.sh
+./bin/data/create-samples-dir.sh
 echo "-- | Done."
 
 echo "-------------------------------------------------"
-echo "You should be ready to run one of the experiments from the ./experiments directory:"
-find ./experiments | grep attacks.py
-
-echo "... Once you run this command: source ./bin/attacks/env.sh"
+echo "You should be ready to run one of the experiments from the ./experiments directory."
+echo "For example: python3 ./experiments/baseline-ctc/attacks.py --max_examples 1"
+echo "-------------------------------------------------"
+echo "[!!!] Once you run this command: source ./bin/attacks/env.sh"

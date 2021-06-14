@@ -58,8 +58,8 @@ RUN ./bin/deepspeech/get-v041-model-files.sh
 FROM base as csdownloads
 USER cleverspeech
 WORKDIR ${CLEVERSPEECH_HOME}
-RUN ./bin/mcv/create-samples-dir.sh
-RUN ./bin/mcv/create-silence-dir.sh
+RUN ./bin/data/create-samples-dir.sh
+RUN ./bin/data/create-silence-dir.sh
 
 #############################
 # deepspeech ctc decoder
