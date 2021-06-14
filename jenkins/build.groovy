@@ -7,7 +7,7 @@ pipeline {
         BASE_IMAGE = "tensorflow/tensorflow:1.13.1-gpu-py3"
         IMAGE_NAME = "dijksterhuis/cleverspeech"
         GITHUB_BRANCH = "master"
-        BUILD_TAG = "build"
+        BUILD_TAG = "latest"
         OUTPUT_IMAGE = "${IMAGE_NAME}:${BUILD_TAG}"
     }
     options {
@@ -59,6 +59,10 @@ pipeline {
                         --no-cache \
                         .
 
+                    docker tag \
+                        ${IMAGE_NAME}:${BUILD_TAG} \
+                        ${IMAGE_NAME}:${GIT_COMMIT}
+
                     """
                 }
             }
@@ -68,7 +72,8 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry([ credentialsId: "dhub-mr", url: "" ]) {
-                        sh "docker push ${OUTPUT_IMAGE}"
+                        sh "echo 'pushing latest' && docker push ${IMAGE_NAME}:${BUILD_TAG}"
+                        sh "echo 'pushin git commit hash' && docker push ${IMAGE_NAME}:${GIT_COMMIT}"
                     }
                 }
             }

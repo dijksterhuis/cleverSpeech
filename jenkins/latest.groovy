@@ -2,7 +2,7 @@ pipeline {
     agent { label 'cpu' }
     environment {
         IMAGE_NAME = "dijksterhuis/cleverspeech"
-        BUILD_TAG = "build"
+        BUILD_TAG = "latest"
         BRANCH = "master"
         TAG = "latest"
     }
@@ -13,7 +13,6 @@ pipeline {
     }
     triggers {
         pollSCM('@daily')
-        upstream(upstreamProjects: './base', threshold: hudson.model.Result.SUCCESS)
     }
     stages {
 
