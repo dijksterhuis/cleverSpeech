@@ -89,8 +89,6 @@ COPY --from=decoder /home/cleverspeech/dist/ ./dist/
 
 RUN python3 -m pip install --user --force-reinstall ./dist/*.whl
 
-ENV PYTHONPATH="${PYTHONPATH}:${CLEVERSPEECH_HOME}:/home/cleverspeech/cleverSpeech/models/DeepSpeech_v041/src/"
-
 #############################
 # entrypoint setup
 # must be run as root so we can switch users and change file ownership at runtime
