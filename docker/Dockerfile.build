@@ -60,6 +60,7 @@ USER cleverspeech
 WORKDIR ${CLEVERSPEECH_HOME}
 RUN ./bin/data/create-samples-dir.sh
 RUN ./bin/data/create-silence-dir.sh
+RUN ./bin/data/create-refsig-dir.sh
 
 #############################
 # deepspeech ctc decoder
@@ -85,6 +86,7 @@ RUN python3 -m pip install --upgrade --user -r ./reqs.txt
 COPY --from=dsdownloads ${CLEVERSPEECH_HOME}/models/DeepSpeech_v041/data/ ./models/DeepSpeech_v041/data/
 COPY --from=csdownloads ${CLEVERSPEECH_HOME}/samples/ ./samples/
 COPY --from=csdownloads ${CLEVERSPEECH_HOME}/silence/ ./silence/
+COPY --from=csdownloads ${CLEVERSPEECH_HOME}/reference-signals/ ./reference-signals/
 COPY --from=decoder /home/cleverspeech/dist/ ./dist/
 
 RUN python3 -m pip install --user --force-reinstall ./dist/*.whl
