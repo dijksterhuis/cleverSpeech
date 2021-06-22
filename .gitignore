@@ -1,23 +1,26 @@
+# basic stuff
 __pycache__
 venv
 .idea
 *.pyc
-sample*
-silence*
-*example.wav
-*delta.wav
-*adv*
-*.wav
 notes/
+/scratch/*
 *.log
-*-logits/
-/experiments/*/data/
-/tmp/
+*tmp*
+
+# model specifics
 /models/
 !/models/DeepSpeech_v041/
 /models/*/data/*
+
+# in/out data directories and file types
+/samples/
+/silence/
+/reference-signals/
+*adv*
+*-logits/
+*.tar*
+*delta.wav
+*.wav
 *.csv
 *.json
-*tmp*
-/scratch/*
-*.tar*
