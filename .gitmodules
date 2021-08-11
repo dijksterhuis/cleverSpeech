@@ -7,10 +7,6 @@
 	path = cleverspeech
 	url = ../cleverspeech-py.git
 	branch = master
-[submodule "models/DeepSpeech/src"]
-	path = models/DeepSpeech_v041/src
-	url = ../DeepSpeechAdversary.git
-	branch = adversarial-v0.4.1
 [submodule "cleverSpeech.wiki"]
 	path = wiki
 	url = ../cleverSpeech.wiki.git
