@@ -13,12 +13,8 @@ echo "++ | Installing cleverSpeech python dependencies..."
 python3 -m pip install --upgrade --requirement ./reqs.txt
 echo "-- | Done."
 
-echo "++ | Installing victim model python dependencies..."
-python3 -m pip install --upgrade --r ./models/DeepSpeech/src/requirements.txt
-echo "-- | Done."
-
 echo "++ | Getting DeepSpeech files..."
-./bin/deepspeech/get_model_files.sh
+./bin/deepspeech/get-v093-model-files.sh
 echo "-- | Done."
 
 echo "++ | Getting pre-processed Common Voice files from AWS..."

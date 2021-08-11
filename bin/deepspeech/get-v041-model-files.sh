@@ -3,7 +3,7 @@
 export DS_VERSION="0.4.1"
 DS_RELEASE_URL="https://github.com/mozilla/DeepSpeech/releases/download/v${DS_VERSION}"
 BASE_PATH=$(pwd)
-OUTPUT_PATH="${BASE_PATH}/models/DeepSpeech_v041/data/"
+OUTPUT_PATH="${BASE_PATH}/cleverspeech/models/DeepSpeech_v0_4_1/data/"
 
 
 if [[ $(basename ${BASE_PATH}) != "cleverSpeech" ]]

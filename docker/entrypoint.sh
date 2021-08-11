@@ -35,11 +35,6 @@ else
 fi
 
 export PYTHONPATH="${PYTHONPATH}:/home/cleverspeech/cleverSpeech"
-for model_dir in ./models/*/src/
-do
-    export PYTHONPATH="${PYTHONPATH}:$(pwd)/${model_dir}"
-done
-
 
 exec sudo -E -H -u cleverspeech PYTHONPATH=${PYTHONPATH} ${cmd}
 

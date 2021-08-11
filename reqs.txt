@@ -1,31 +1,20 @@
-# this is 1.1 versions ahead of the  official DeepSpeech 0.4.1 requirements. It still works and we
-# can use the `tf.signal` library.
-tensorflow-gpu==1.13.1
-
-# we have to use the CPU deepspeech package unless we go down the route of completely rebuilding the
-# native client using the modified tensorflow v1.12.x sources, which I'm not too keen on just now...
-# See here: https://github.com/mozilla/DeepSpeech/tree/v0.4.1/native_client
-# Also... deepspeech-gpu v0.4.1 wants CUDA 9.x installed... But the TF 13.1 docker image is CUDA 10.
-# Installing cuda 9 to /usr/local might fix this, but because we're only using this package during
-# reporting (i.e. running inference to double check our results work against the package) so it
-# should be okay to not worry about it for now.
-deepspeech==0.4.1
-
 # soundfile has a nicer API than scipy.io.wavfile
 soundfile
-
-# API to check GPU memory utilisation
-py3nvml
 
 # A and ITU weighting curves which can be applied during evaluation
 git+https://github.com/endolith/waveform_analysis.git@master#egg=waveform_analysis
 
-# feature extraction library
 python_speech_features
-
-# Graphs n stuff
+scipy
 matplotlib
 argparse
-
-# aws
 boto3
+py3nvml
+tensorflow-gpu==1.15.5
+deepspeech-gpu==0.9.3
+ds_ctcdecoder==0.9.3
+
+# deepspeech 0.93 dependencies
+semver
+attrdict
+progressbar

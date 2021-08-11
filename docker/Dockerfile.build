@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:1.13.1-gpu-py3 as base
+FROM tensorflow/tensorflow:1.15.5-gpu-py3 as base
 
 USER root
 # set up the basic image
@@ -45,12 +45,12 @@ RUN git clone --recurse-submodules ${CLEVERSPEECH_URL} ${CLEVERSPEECH_HOME}
 # == Use multi-stage builds for large files or build steps where we only need the final ouput.
 
 #############################
-# large deepspeech v0.4.1 files
+# large deepspeech v0.9.3 files
 
 FROM base as dsdownloads
 USER cleverspeech
 WORKDIR ${CLEVERSPEECH_HOME}
-RUN ./bin/deepspeech/get-v041-model-files.sh
+RUN ./bin/deepspeech/get-v093-model-files.sh
 
 #############################
 # common voice audio examples
@@ -63,14 +63,14 @@ RUN ./bin/data/create-silence-dir.sh
 RUN ./bin/data/create-refsig-dir.sh
 
 #############################
-# deepspeech ctc decoder
-
-FROM base as decoder
-# Build DeepSpeech decoder
-USER root
-WORKDIR ${CLEVERSPEECH_HOME}/models/DeepSpeech_v041/src/native_client/ctcdecode
-RUN make bindings NUM_PROCESSES=4
-RUN cp -r ${CLEVERSPEECH_HOME}/models/DeepSpeech_v041/src/native_client/ctcdecode/dist/ /home/cleverspeech/dist/
+# deepspeech ctc decoder for 0.4.1 only
+#
+#FROM base as decoder
+## Build DeepSpeech decoder
+#USER root
+#WORKDIR ${CLEVERSPEECH_HOME}/models/DeepSpeech_v041/src/native_client/ctcdecode
+#RUN make bindings NUM_PROCESSES=4
+#RUN cp -r ${CLEVERSPEECH_HOME}/models/DeepSpeech_v041/src/native_client/ctcdecode/dist/ /home/cleverspeech/dist/
 
 
 #############################
@@ -80,16 +80,15 @@ FROM base as installs
 
 USER cleverspeech
 WORKDIR ${CLEVERSPEECH_HOME}
-RUN python3 -m pip install --upgrade --user -r ./models/*/src/requirements.txt
 RUN python3 -m pip install --upgrade --user -r ./reqs.txt
 
-COPY --from=dsdownloads ${CLEVERSPEECH_HOME}/models/DeepSpeech_v041/data/ ./models/DeepSpeech_v041/data/
+COPY --from=dsdownloads ${CLEVERSPEECH_HOME}/cleverspeech/models/DeepSpeech_v0_9_3/data/ ./cleverspeech/models/DeepSpeech_v0_9_3/data/
 COPY --from=csdownloads ${CLEVERSPEECH_HOME}/samples/ ./samples/
 COPY --from=csdownloads ${CLEVERSPEECH_HOME}/silence/ ./silence/
 COPY --from=csdownloads ${CLEVERSPEECH_HOME}/reference-signals/ ./reference-signals/
-COPY --from=decoder /home/cleverspeech/dist/ ./dist/
 
-RUN python3 -m pip install --user --force-reinstall ./dist/*.whl
+#COPY --from=decoder /home/cleverspeech/dist/ ./dist/
+#RUN python3 -m pip install --user --force-reinstall ./dist/*.whl
 
 #############################
 # entrypoint setup
@@ -98,7 +97,7 @@ RUN python3 -m pip install --user --force-reinstall ./dist/*.whl
 FROM installs
 USER root
 RUN rm -rf /tmp/*
-RUN rm -rf ${CLEVERSPEECH_HOME}/dist/
+#RUN rm -rf ${CLEVERSPEECH_HOME}/dist/
 COPY ./docker/entrypoint.sh /entrypoint.sh
 WORKDIR /home/cleverspeech/cleverSpeech
 
