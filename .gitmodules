@@ -1,8 +1,4 @@
 
-[submodule "experiments"]
-	path = experiments
-	url = ../cleverspeech-exp.git
-	branch = master
 [submodule "cleverspeech"]
 	path = cleverspeech
 	url = ../cleverspeech-py.git
