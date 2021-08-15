@@ -42,6 +42,10 @@ USER cleverspeech
 ENV CLEVERSPEECH_URL=https://github.com/dijksterhuis/cleverSpeech
 RUN git clone --recurse-submodules ${CLEVERSPEECH_URL} ${CLEVERSPEECH_HOME}
 
+ENV DEEPSPEECH_DATA_DIR="${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/data"
+RUN mkdir -p ${DEEPSPEECH_DATA_DIR}
+
+
 # == Use multi-stage builds for large files or build steps where we only need the final ouput.
 
 #############################
@@ -54,11 +58,21 @@ RUN ${CLEVERSPEECH_HOME}/bin/deepspeech/get-v093-model-files.sh
 #############################
 # common voice audio examples
 
-FROM base as csdownloads
+FROM base as data-samples
 USER cleverspeech
+WORKDIR ${CLEVERSPEECH_HOME}
 RUN ${CLEVERSPEECH_HOME}/bin/data/create-samples-dir.sh
+
+FROM base as data-silence
+USER cleverspeech
+WORKDIR ${CLEVERSPEECH_HOME}
 RUN ${CLEVERSPEECH_HOME}/bin/data/create-silence-dir.sh
+
+FROM base as data-refsig
+USER cleverspeech
+WORKDIR ${CLEVERSPEECH_HOME}
 RUN ${CLEVERSPEECH_HOME}/bin/data/create-refsig-dir.sh
+
 
 #############################
 # deepspeech ctc decoder for 0.4.1 only
@@ -78,10 +92,10 @@ FROM base as installs
 
 USER cleverspeech
 
-COPY --from=dsdownloads ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/data/ ./cleverspeech/models/__DeepSpeech_v0_9_3/data/
-COPY --from=csdownloads ${CLEVERSPEECH_HOME}/samples/ ./samples/
-COPY --from=csdownloads ${CLEVERSPEECH_HOME}/silence/ ./silence/
-COPY --from=csdownloads ${CLEVERSPEECH_HOME}/reference-signals/ ./reference-signals/
+COPY --from=dsdownloads ${DEEPSPEECH_DATA_DIR} ${DEEPSPEECH_DATA_DIR}
+COPY --from=data-samples ${CLEVERSPEECH_HOME}/samples/ ./samples/
+COPY --from=data-silence ${CLEVERSPEECH_HOME}/silence/ ./silence/
+COPY --from=data-refsig ${CLEVERSPEECH_HOME}/reference-signals/ ./reference-signals/
 
 RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
 
