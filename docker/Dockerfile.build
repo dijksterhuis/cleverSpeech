@@ -110,8 +110,8 @@ RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
 FROM installs
 USER root
 RUN rm -rf /tmp/*
-RUN cp -fv ./docker/entrypoint.sh /entrypoint.sh
-RUN cp -fv ./docker/bash.bashrc /etc/bash.bashrc
+RUN cp -fv ${CLEVERSPEECH_HOME}/docker/entrypoint.sh /entrypoint.sh
+RUN cp -fv ${CLEVERSPEECH_HOME}/docker/bash.bashrc /etc/bash.bashrc
 
 WORKDIR ${CLEVERSPEECH_HOME}
 
