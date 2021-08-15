@@ -110,8 +110,9 @@ RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
 FROM installs
 USER root
 RUN rm -rf /tmp/*
-#RUN rm -rf ${CLEVERSPEECH_HOME}/dist/
-COPY ./docker/entrypoint.sh /entrypoint.sh
+RUN cp -fv ./docker/entrypoint.sh /entrypoint.sh
+RUN cp -fv ./docker/bash.bashrc /etc/bash.bashrc
+
 WORKDIR ${CLEVERSPEECH_HOME}
 
 # Use -g to kill entire process groups when terminating:
