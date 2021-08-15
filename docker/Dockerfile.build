@@ -83,7 +83,7 @@ COPY --from=csdownloads ${CLEVERSPEECH_HOME}/samples/ ./samples/
 COPY --from=csdownloads ${CLEVERSPEECH_HOME}/silence/ ./silence/
 COPY --from=csdownloads ${CLEVERSPEECH_HOME}/reference-signals/ ./reference-signals/
 
-RUN python3 -m pip install -e ${CLEVERSPEECH_HOME}
+RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
 
 #COPY --from=decoder /home/cleverspeech/dist/ ./dist/
 #RUN python3 -m pip install --user --force-reinstall ./dist/*.whl
