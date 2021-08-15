@@ -34,7 +34,5 @@ else
     echo "Modified. Entering container."
 fi
 
-export PYTHONPATH="${PYTHONPATH}:/home/cleverspeech/cleverSpeech"
-
-exec sudo -E -H -u cleverspeech PYTHONPATH=${PYTHONPATH} ${cmd}
+exec sudo -E -H -u cleverspeech ${cmd}
 

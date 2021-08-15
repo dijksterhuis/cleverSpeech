@@ -8,11 +8,9 @@ notes/
 *.log
 *tmp*
 
-# model specifics
-/models/
-!/models/DeepSpeech_v041/
-/models/*/data/*
-
+# python build dirs
+/build/
+/cleverSpeech.egg-info/
 # in/out data directories and file types
 /samples/
 /silence/
