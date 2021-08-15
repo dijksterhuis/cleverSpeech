@@ -45,7 +45,7 @@ setup(
     author='Mike Robeson',
     author_email='mrobeson@dundee.ac.uk',
     description='Generating adversarial examples for Mozilla DeepSpeech.',
-    # entry_points={
-    #     "console_scripts": console_scripts
-    # }
+    entry_points={
+        "console_scripts": console_scripts
+    }
 )
