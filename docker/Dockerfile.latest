@@ -1,9 +1,9 @@
-FROM dijksterhuis/cleverspeech:build
+FROM dijksterhuis/cleverspeech:latest
 
 USER cleverspeech
 RUN cd ${CLEVERSPEECH_HOME} \
  && git checkout master \
  && git pull --recurse-submodules \
  && echo "Completed checkouts."
-RUN python3 -m pip install -e ${CLEVERSPEECH_HOME}
+RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
 USER root
