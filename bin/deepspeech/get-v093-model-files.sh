@@ -19,7 +19,8 @@ then
 fi
 
 
-DS_CHECKPOINT_FILE="deepspeech-${DS_VERSION}-checkpoint.tar.gz"
+DS_CHECKPOINT_DIR="deepspeech-${DS_VERSION}-checkpoint"
+DS_CHECKPOINT_FILE="${DS_CHECKPOINT_DIR}.tar.gz"
 DS_SCORER_FILE="deepspeech-${DS_VERSION}-models.scorer"
 
 DS_CHECKPOINT_URL="${DS_RELEASE_URL}/${DS_CHECKPOINT_FILE}"
@@ -39,7 +40,7 @@ wget --no-verbose ${DS_CHECKPOINT_URL}
 
 echo "Extracting checkpoint."
 tar xvfz ./${DS_CHECKPOINT_FILE}
-mv ./${DS_CHECKPOINT_FILE} ${DS_DATA_DIR}
+mv -v ./${DS_CHECKPOINT_DIR}/ ${DS_DATA_DIR}/
 
 echo "Removing archive."
 rm -f ./${DS_CHECKPOINT_FILE}
