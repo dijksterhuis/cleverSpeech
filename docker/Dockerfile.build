@@ -53,6 +53,7 @@ RUN mkdir -p ${DEEPSPEECH_DATA_DIR}
 
 FROM base as dsdownloads
 USER cleverspeech
+WORKDIR ${CLEVERSPEECH_HOME}
 RUN ${CLEVERSPEECH_HOME}/bin/deepspeech/get-v093-model-files.sh
 
 #############################
@@ -93,9 +94,9 @@ FROM base as installs
 USER cleverspeech
 
 COPY --from=dsdownloads ${DEEPSPEECH_DATA_DIR} ${DEEPSPEECH_DATA_DIR}
-COPY --from=data-samples ${CLEVERSPEECH_HOME}/samples/ ./samples/
-COPY --from=data-silence ${CLEVERSPEECH_HOME}/silence/ ./silence/
-COPY --from=data-refsig ${CLEVERSPEECH_HOME}/reference-signals/ ./reference-signals/
+COPY --from=data-samples ${CLEVERSPEECH_HOME}/samples/ ${CLEVERSPEECH_HOME}/samples/
+COPY --from=data-silence ${CLEVERSPEECH_HOME}/silence/ ${CLEVERSPEECH_HOME}/silence/
+COPY --from=data-refsig ${CLEVERSPEECH_HOME}/reference-signals/ ${CLEVERSPEECH_HOME}/reference-signals/
 
 RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
 

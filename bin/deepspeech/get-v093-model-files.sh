@@ -25,23 +25,21 @@ DS_SCORER_FILE="deepspeech-${DS_VERSION}-models.scorer"
 DS_CHECKPOINT_URL="${DS_RELEASE_URL}/${DS_CHECKPOINT_FILE}"
 DS_MODEL_DATA_URL="${DS_RELEASE_URL}/${DS_SCORER_FILE}"
 
-mkdir -p ${DS_DATA_DIR} && cd ${DS_DATA_DIR}
+mkdir -p ${DS_DATA_DIR} ${DS_DATA_DIR}/models
 
 echo "Getting scorer file."
 wget --no-verbose ${DS_MODEL_DATA_URL}
 
 echo "Moving scorer and alphabet files."
-mkdir ./models
-mv -v ./${DS_SCORER_FILE} ./models/
-cp -fv ${DS_SRC_DIR}/data/alphabet.txt ./models/
+mv -v ./${DS_SCORER_FILE} ${DS_DATA_DIR}/models
+cp -fv ${DS_SRC_DIR}/data/alphabet.txt ${DS_DATA_DIR}/models/
 
 echo "Getting checkpoint file."
 wget --no-verbose ${DS_CHECKPOINT_URL}
 
 echo "Extracting checkpoint."
 tar xvfz ./${DS_CHECKPOINT_FILE}
+mv ./${DS_CHECKPOINT_FILE} ${DS_DATA_DIR}
 
 echo "Removing archive."
 rm -f ./${DS_CHECKPOINT_FILE}
-
-cd ${BASE_PATH}
