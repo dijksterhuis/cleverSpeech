@@ -1,6 +1,6 @@
 # cleverSpeech
 
-Code to generate adversarial examples for [Mozilla STT][1].
+Code to generate adversarial examples for [Mozilla DeepSpeech][1].
 Began as a modified version of [Carlini and Wagner's Attacks][0].
 
 This is the build repo for docker images.
@@ -9,8 +9,9 @@ outlined below.
 
 ## run the code
 
-Docker images are available [here](https://hub.docker.com/u/dijksterhuis/cleverspeech). The `latest`
-tag image includes all experiments at their current point in development (basically dev/unstable).
+Docker images are available [here](https://hub.docker.com/u/dijksterhuis/cleverspeech).
+Each docker image contains the necessary audio examples, transcripts and model checkpoints etc. to
+get up and running with minimal fuss.
 
 To start running some experiments with docker:
 
@@ -25,9 +26,12 @@ docker run \
     --gpus all \
     dijksterhuis/cleverspeech:latest
 ```
-4. Run one of the scripts from the [`./cleverspeech/scripts`](https://github.com/dijksterhuis/cleverspeech-py)
+4. Run one of the scripts from [`./cleverspeech/scripts`](https://github.com/dijksterhuis/cleverspeech-py)
 ```bash
-python3 ./cleverspeech/scripts/ctc-attacks.py --max_examples 1 --batch_size 1 --max_spawns 1
+python3 ./cleverspeech/scripts/ctc_attacks.py \
+  --max_examples 1 \  # number of adversarial examples to generate
+  --attack_graph cgd \  # clipped gradient descent
+  --loss ctc  # tensorflow provides two ctc loss implementations
 ```
 
 If you want to run the container as your user and group ID you'll need to some extra arguments so
@@ -44,6 +48,9 @@ docker run \
     -v path/to/output/dir:/home/cleverspeech/cleverSpeech/adv:rw \
     dijksterhuis/cleverspeech:latest
 ```
+
+**Note**: Using `--user` with `docker run` will *not* work as the container must start as root then
+switch users after start up (otherwise you can't `chown` the model checkpoints/scorer files).
 
 ### don't like docker?
 
