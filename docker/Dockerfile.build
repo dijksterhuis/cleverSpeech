@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:1.15.5-gpu-py3 as base
+FROM tensorflow/tensorflow:1.13.1-gpu-py3 as base
 
 USER root
 # set up the basic image
