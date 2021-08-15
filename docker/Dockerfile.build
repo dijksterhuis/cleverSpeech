@@ -6,7 +6,7 @@ USER root
 ENV USER=cleverspeech
 ENV USER_ID=9999
 ENV GROUP_ID=9999
-ENV CLEVERSPEECH_HOME="/home/${USER}/cleverSpeech"
+ENV CLEVERSPEECH_HOME="/home/${USER}"
 
 RUN groupadd -g ${GROUP_ID} ${USER}
 RUN useradd -m ${USER} -g ${GROUP_ID} -u ${USER_ID}
