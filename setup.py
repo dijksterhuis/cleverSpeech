@@ -20,6 +20,7 @@ packages = [
     'cleverspeech.data.egress',
     'cleverspeech.data.egress.metrics',
     'cleverspeech.data.ingress',
+    'cleverspeech.data.utils',
     'cleverspeech.graph',
     'cleverspeech.utils',
     'cleverspeech.config',
