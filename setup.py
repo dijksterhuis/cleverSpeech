@@ -32,6 +32,7 @@ console_scripts = [
     "beam-path-attacks=cleverspeech.scripts.beam_search_path_attacks:main",
     "greedy-path-attacks=cleverspeech.scripts.greedy_search_path_attacks:main",
     "ctc-attacks=cleverspeech.scripts.ctc_attacks:main",
+    "gradient-path-attacks=cleverspeech.scripts.gradient_path_attacks:main",
     "gpu_max_batch_size=cleverspeech.scripts.gpu_max_batch_size:main",
     "validate_examples=cleverspeech.scripts.validate:main",
 ]
