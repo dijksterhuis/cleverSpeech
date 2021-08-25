@@ -22,6 +22,8 @@ packages = [
     'cleverspeech.data.ingress',
     'cleverspeech.data.utils',
     'cleverspeech.graph',
+    'cleverspeech.graph.losses',
+    'cleverspeech.graph.losses.adversarial',
     'cleverspeech.utils',
     'cleverspeech.config',
     'cleverspeech.runtime',
