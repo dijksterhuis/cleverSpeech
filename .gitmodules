@@ -3,7 +3,3 @@
 	path = cleverspeech
 	url = ../cleverspeech-py.git
 	branch = master
-[submodule "cleverSpeech.wiki"]
-	path = wiki
-	url = ../cleverSpeech.wiki.git
-	branch = master
