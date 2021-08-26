@@ -3,6 +3,13 @@ name: docker-build
 on:
   push:
     branches: [ master ]
+    paths-ignore:  # stop README etc. changes from auto-building
+      - '.gitignore'
+      - '.dockerignore'
+      - 'jenkins/**'
+      - 'README.md'
+      - 'LICENSE'
+      - 'VERSION'
   workflow_dispatch:
 jobs:
   docker:
