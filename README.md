@@ -10,7 +10,7 @@ outlined below.
 
 ## run the code
 
-Docker images are available [here](https://hub.docker.com/u/dijksterhuis/cleverspeech).
+Docker images are available [here](https://hub.docker.com/r/dijksterhuis/cleverspeech).
 Each docker image contains the necessary audio examples, transcripts and model checkpoints etc. to
 get up and running with minimal fuss.
 
@@ -27,7 +27,7 @@ docker run \
     --gpus all \
     dijksterhuis/cleverspeech:latest
 ```
-4. Run one of the scripts from [`./cleverspeech/scripts`](https://github.com/dijksterhuis/cleverspeech-py)
+4. Run one of the scripts from [`./cleverspeech/scripts`](https://github.com/dijksterhuis/cleverspeech-py/tree/master/scripts)
 ```bash
 python3 ./cleverspeech/scripts/ctc_attacks.py \
   --max_examples 1 \  # number of adversarial examples to generate
