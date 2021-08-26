@@ -4,15 +4,15 @@
 Code to generate adversarial examples for [Mozilla DeepSpeech][1].
 Began as a modified version of [Carlini and Wagner's attack][0].
 
-This is the build repo for docker images.
-If you want to see the package in action, grab a docker image or clone this repo using the steps
-outlined below.
+This is the build repo.
+If you want to see the package in action, grab a docker image or install the package
+using the steps outlined below.
 
 ## run the code
 
 Docker images are available [here](https://hub.docker.com/r/dijksterhuis/cleverspeech).
 Each docker image contains the necessary audio examples, transcripts and model checkpoints etc. to
-get up and running with minimal fuss.
+get up and running with minimal fuss. 
 
 To start running some experiments with docker:
 
