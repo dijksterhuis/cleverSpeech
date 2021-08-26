@@ -29,6 +29,7 @@ jobs:
           no-cache: true
           push: true
           pull: true
+          file: ./docker/Dockerfile.build
           
           
           
