@@ -1,5 +1,5 @@
-[![docker-build](https://github.com/dijksterhuis/cleverSpeech/actions/workflows/docker-build.yml/badge.svg)](https://github.com/dijksterhuis/cleverSpeech/actions/workflows/docker-build.yml)
 # cleverSpeech
+[![docker-build](https://github.com/dijksterhuis/cleverSpeech/actions/workflows/docker-build.yml/badge.svg)](https://github.com/dijksterhuis/cleverSpeech/actions/workflows/docker-build.yml)
 
 Code to generate adversarial examples for [Mozilla DeepSpeech][1].
 Began as a modified version of [Carlini and Wagner's attack][0].
