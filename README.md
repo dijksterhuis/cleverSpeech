@@ -1,7 +1,8 @@
+[![docker-build](https://github.com/dijksterhuis/cleverSpeech/actions/workflows/docker-build.yml/badge.svg)](https://github.com/dijksterhuis/cleverSpeech/actions/workflows/docker-build.yml)
 # cleverSpeech
 
 Code to generate adversarial examples for [Mozilla DeepSpeech][1].
-Began as a modified version of [Carlini and Wagner's Attacks][0].
+Began as a modified version of [Carlini and Wagner's attack][0].
 
 This is the build repo for docker images.
 If you want to see the package in action, grab a docker image or clone this repo using the steps
@@ -64,14 +65,6 @@ git clone --recurse-submodules \  # may take a while due to tensorflow submodule
 ```
 
 Then run an experiment as before.
-
-## citations, licenses and sourced works
-
-TODO: Update licenses.
-
-I've modified the following works, many thanks to the authors:
-- [Carlini & Wagner][0]
-- [Mozilla STT][1]
 
 
 [0]: https://arxiv.org/abs/1801.01944
