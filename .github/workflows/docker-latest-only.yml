@@ -8,6 +8,7 @@ on:
       - 'README.md'
       - 'LICENSE'
       - 'VERSION'
+      - '.github/workflow**latest**'
   workflow_dispatch:
 jobs:
   docker-latest:
