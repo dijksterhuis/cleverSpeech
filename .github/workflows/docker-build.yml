@@ -13,7 +13,7 @@ on:
       - 'VERSION'
   workflow_dispatch:
 jobs:
-  docker:
+  docker-full:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

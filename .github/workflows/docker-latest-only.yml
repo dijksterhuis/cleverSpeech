@@ -10,7 +10,7 @@ on:
       - 'VERSION'
   workflow_dispatch:
 jobs:
-  docker:
+  docker-latest:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
