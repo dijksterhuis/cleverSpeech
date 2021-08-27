@@ -5,6 +5,7 @@ on:
     branches: [ master ]
     paths-ignore:  # stop README etc. changes from auto-building
       - '.gitignore'
+      - 'cleverspeech/**'
       - '.dockerignore'
       - 'jenkins/**'
       - 'README.md'
