@@ -17,4 +17,4 @@ ds_ctcdecoder==0.9.3
 # deepspeech 0.93 dependencies
 semver
 attrdict
-progressbar
+progressbar2
