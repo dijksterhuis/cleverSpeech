@@ -18,7 +18,7 @@ packages = [
     'cleverspeech',
     'cleverspeech.data',
     'cleverspeech.data.egress',
-    'cleverspeech.data.egress.metrics',
+    'cleverspeech.data.metrics',
     'cleverspeech.data.ingress',
     'cleverspeech.data.utils',
     'cleverspeech.graph',
