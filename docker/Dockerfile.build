@@ -41,6 +41,15 @@ RUN chmod +x /tini
 USER cleverspeech
 ENV CLEVERSPEECH_URL=https://github.com/dijksterhuis/cleverSpeech
 RUN git clone --recurse-submodules ${CLEVERSPEECH_URL} ${CLEVERSPEECH_HOME}
+# delete deepspeech submodule contents
+### all versions
+RUN rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/doc/*
+RUN rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/examples/*
+RUN rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/taskcluster/*
+### later versions
+RUN rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/src/tensorflow/*
+RUN rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/src/kenlm/*
+RUN rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/src/native_client/*
 
 ENV DEEPSPEECH_DATA_DIR="${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/data"
 RUN mkdir -p ${DEEPSPEECH_DATA_DIR}
@@ -112,6 +121,9 @@ USER root
 RUN rm -rf /tmp/*
 RUN cp -fv ${CLEVERSPEECH_HOME}/docker/entrypoint.sh /entrypoint.sh
 RUN cp -fv ${CLEVERSPEECH_HOME}/docker/bash.bashrc /etc/bash.bashrc
+# make sure all files belong to current cleverspeech user
+RUN chown -R ${USER_ID}:${GROUP_ID} ${CLEVERSPEECH_HOME}/
+
 
 WORKDIR ${CLEVERSPEECH_HOME}
 
