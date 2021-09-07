@@ -25,6 +25,7 @@ RUN apt update \
 	sudo \
 	python3 \
 	llvm-8* \
+	parallel \
  && apt clean \
  && rm -rf /var/lib/apt/lists/* \
  && apt autoremove -yqq
