@@ -12,8 +12,12 @@ if [[ -z ${LOCAL_UID} && -z ${LOCAL_GID} ]]
 then
     echo ""
 else
+
     echo "Modifying container for UID=${LOCAL_UID} and GID=${LOCAL_GID}"
+    echo "This take a while to complete... so please bear with me..."
+    echo ""
     echo "=> chown-ing files..."
+
     N_CPUS=$(cat /proc/cpuinfo | grep -c processor)
 
     find /home/cleverspeech \
