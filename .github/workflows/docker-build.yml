@@ -7,6 +7,7 @@ on:
       - '.gitignore'
       - '.dockerignore'
       - 'jenkins/**'
+      - 'cleverspeech/**'
       - 'README.md'
       - 'LICENSE'
       - 'VERSION'
