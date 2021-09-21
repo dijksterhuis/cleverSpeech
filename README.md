@@ -3,6 +3,7 @@
 
 Code to generate adversarial examples for [Mozilla DeepSpeech][1].
 Began as a modified version of [Carlini and Wagner's attack][0].
+Has slowly turned into a bit of a behemoth.
 
 This is the build repo.
 If you want to see the package in action, grab a docker image or install the package
@@ -60,11 +61,13 @@ Run:
 git clone --recurse-submodules \  # may take a while due to tensorflow submodule in DeepSpeech repo
   https://github.com/dijksterhuis/cleverSpeech.git \
   && cd ./cleverSpeech/ \
-  && ./bin/install.sh \
+  && ./bin/downloads.sh \
   && python3 -m pip install -e .
 ```
 
-Then run an experiment as before.
+Then run an experiment as before
+and have fun fixing undocumented/unexpected dependency errors 
+(there *shouldn't* be any on `ubuntu >= 18.04`).
 
 
 [0]: https://arxiv.org/abs/1801.01944
