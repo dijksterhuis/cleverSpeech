@@ -5,12 +5,15 @@ on:
     branches: [ master ]
     paths-ignore:  # stop README etc. changes from auto-building
       - '.gitignore'
+      - '.github/workflows/docker-latest.yml'
       - '.dockerignore'
       - 'jenkins/**'
       - 'cleverspeech/**'
+      - 'cleverspeech'
       - 'README.md'
       - 'LICENSE'
       - 'VERSION'
+      - 'docker/Dockerfile.latest'
   workflow_dispatch:
 jobs:
   docker-full:
