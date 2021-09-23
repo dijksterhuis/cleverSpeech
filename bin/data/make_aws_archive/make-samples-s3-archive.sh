@@ -21,7 +21,7 @@ echo "Getting targets file"
 cp -fv ${TRANSCRIPTION_FILE} ./samples/
 
 echo "Pre-processing audio (normalise, trim) and generating json example files."
-python3 ./bin/mcv/make_aws_archive/preprocess_samples.py ./samples/all ${TRANSCRIPTION_FILE}
+python3 ./bin/data/make_aws_archive/preprocess_samples.py ./samples/all ${TRANSCRIPTION_FILE}
 
 # create archive for S3
 echo "Archiving."
