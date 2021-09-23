@@ -5,6 +5,7 @@ pyloudnorm
 # A and ITU weighting curves which can be applied during evaluation
 git+https://github.com/endolith/waveform_analysis.git@master#egg=waveform_analysis
 
+librosa
 python_speech_features
 scipy
 matplotlib

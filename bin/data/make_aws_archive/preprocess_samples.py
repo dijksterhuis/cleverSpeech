@@ -4,7 +4,6 @@ import os
 import sys
 import json
 import time
-import librosa
 import soundfile
 import progressbar
 
@@ -100,19 +99,6 @@ def main(wav_dir, trans_file_path):
     abs_wav_file_paths = [x for x in abs_paths if not os.path.isdir(x) and ".wav" in x]
 
     wavs = load_wavs(abs_wav_file_paths, "int16")
-
-    wavs = l_map(
-        lambda x: amplitude_normalisation(x),
-        wavs
-    )
-    wavs = l_map(
-        lambda x: librosa.effects.trim(x, ref=np.mean, top_db=20)[0],
-        wavs
-    )
-    wavs = l_map(
-        lambda x: x.astype(np.int16),
-        wavs
-    )
 
     print("\n\nPre-processing done... Writing over existing files.")
 
