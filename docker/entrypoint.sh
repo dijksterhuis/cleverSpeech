@@ -11,6 +11,11 @@ fi
 if [[ -z ${LOCAL_UID} && -z ${LOCAL_GID} ]]
 then
     echo ""
+elif [[ ${LOCAL_UID} == $(id -u cleverspeech) && ${LOCAL_GID} == $(id -g cleverspeech) ]]
+then
+    echo "Your UID=${LOCAL_UID} and GID=${LOCAL_GID} match the container user."
+    echo "==> Not updating files..."
+
 else
 
     echo "Modifying container for UID=${LOCAL_UID} and GID=${LOCAL_GID}"
