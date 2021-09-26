@@ -4,8 +4,8 @@ USER root
 # set up the basic image
 
 ENV USER=cleverspeech
-ENV USER_ID=9999
-ENV GROUP_ID=9999
+ENV USER_ID=1000
+ENV GROUP_ID=1000
 ENV CLEVERSPEECH_HOME="/home/${USER}/cleverSpeech"
 
 RUN groupadd -g ${GROUP_ID} ${USER}
