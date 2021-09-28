@@ -44,8 +44,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           tags: |
-            dijksterhuis/cleverspeech:latest
             dijksterhuis/cleverspeech:${{ github.sha }}
+            dijksterhuis/cleverspeech:latest
           no-cache: true
           push: true
           pull: true
