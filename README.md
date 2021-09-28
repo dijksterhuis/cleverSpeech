@@ -11,9 +11,13 @@ using the steps outlined below.
 
 ## run the code
 
-Docker images are available [here](https://hub.docker.com/r/dijksterhuis/cleverspeech).
+Docker images are available on both
+[DockerHub](https://hub.docker.com/r/dijksterhuis/cleverspeech)
+or 
+[AWS ECR](https://gallery.ecr.aws/w4s1p0b6/cleverspeech)
+(in case you want to avoid DockerHub's rate limiting).
 Each docker image contains the necessary audio examples, transcripts and model checkpoints etc. to
-get up and running with minimal fuss. 
+get up and running with minimal fussing about. 
 
 To start running some experiments with docker:
 
