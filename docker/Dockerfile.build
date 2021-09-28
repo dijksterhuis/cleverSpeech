@@ -102,7 +102,6 @@ RUN ${CLEVERSPEECH_HOME}/bin/data/create-refsig-dir.sh
 FROM base as installs
 
 USER cleverspeech
-
 COPY --from=dsdownloads ${DEEPSPEECH_DATA_DIR} ${DEEPSPEECH_DATA_DIR}
 COPY --from=data-samples ${CLEVERSPEECH_HOME}/samples/ ${CLEVERSPEECH_HOME}/samples/
 COPY --from=data-silence ${CLEVERSPEECH_HOME}/silence/ ${CLEVERSPEECH_HOME}/silence/
@@ -122,9 +121,6 @@ USER root
 RUN rm -rf /tmp/*
 RUN cp -fv ${CLEVERSPEECH_HOME}/docker/entrypoint.sh /entrypoint.sh
 RUN cp -fv ${CLEVERSPEECH_HOME}/docker/bash.bashrc /etc/bash.bashrc
-# make sure all files belong to current cleverspeech user
-RUN chown -R ${USER_ID}:${GROUP_ID} ${CLEVERSPEECH_HOME}/
-
 
 WORKDIR ${CLEVERSPEECH_HOME}
 
