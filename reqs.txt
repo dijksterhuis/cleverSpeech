@@ -15,6 +15,7 @@ py3nvml
 tensorflow-gpu>=1.13.1
 deepspeech-gpu==0.9.3
 ds_ctcdecoder==0.9.3
+tensorflow-determinism
 
 # deepspeech 0.93 dependencies
 semver
