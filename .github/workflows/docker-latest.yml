@@ -9,16 +9,6 @@ on:
       - 'cleverspeech'
       - '.github/workflows/docker-latest.yml'
       - 'docker/Dockerfile.latest'
-  # == or build when ../docker-build has completed
-  # also covers the case when latest push includes both
-  # build and api changes as this forces a second 
-  # docker-latest build stage
-  workflow_run:  
-    workflows: ["docker-build"]
-    # See: https://stackoverflow.com/questions/62750603/github-actions-trigger-another-action-after-one-action-is-completed#comment119409296_65698892
-    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    types:
-      - completed  
   # == or run manually
   workflow_dispatch:
 
@@ -59,15 +49,9 @@ jobs:
           tags: |
             dijksterhuis/cleverspeech:${{ github.sha }}
             dijksterhuis/cleverspeech:latest
+            public.ecr.aws/w4s1p0b6/cleverspeech:latest
           no-cache: true
           push: true
           pull: true
           file: ./docker/Dockerfile.latest
           
-      - name: Push to ECR
-        env:
-          AWS_IMAGE_REPO: public.ecr.aws/w4s1p0b6/cleverspeech
-        run: |
-          docker pull dijksterhuis/cleverspeech:latest
-          docker tag dijksterhuis/cleverspeech:latest ${AWS_IMAGE_REPO}:latest
-          docker push ${AWS_IMAGE_REPO}:latest
