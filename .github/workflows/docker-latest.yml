@@ -7,6 +7,7 @@ on:
     paths:  
       - 'cleverspeech/**'
       - 'cleverspeech'
+      - '.github/workflows/docker-latest.yml'
       - 'docker/Dockerfile.latest'
   # == or build when ../docker-build has completed
   # also covers the case when latest push includes both
