@@ -105,7 +105,7 @@ USER cleverspeech
 COPY --from=dsdownloads ${DEEPSPEECH_DATA_DIR} ${DEEPSPEECH_DATA_DIR}
 COPY --from=data-samples ${CLEVERSPEECH_HOME}/samples/ ${CLEVERSPEECH_HOME}/samples/
 COPY --from=data-silence ${CLEVERSPEECH_HOME}/silence/ ${CLEVERSPEECH_HOME}/silence/
-COPY --from=data-refsig ${CLEVERSPEECH_HOME}/reference-signals/ ${CLEVERSPEECH_HOME}/reference-signals/
+#COPY --from=data-refsig ${CLEVERSPEECH_HOME}/reference-signals/ ${CLEVERSPEECH_HOME}/reference-signals/
 
 RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
 
