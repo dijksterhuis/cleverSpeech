@@ -51,6 +51,6 @@ jobs:
         env:
           AWS_IMAGE_REPO: public.ecr.aws/w4s1p0b6/cleverspeech
         run: |
-          docker tag -t dijksterhuis/cleverspeech:latest ${AWS_IMAGE_REPO}:latest
+          docker tag dijksterhuis/cleverspeech:latest ${AWS_IMAGE_REPO}:latest
           docker push --all-tags ${AWS_IMAGE_REPO}
 
