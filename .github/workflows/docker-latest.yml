@@ -59,9 +59,15 @@ jobs:
           tags: |
             dijksterhuis/cleverspeech:${{ github.sha }}
             dijksterhuis/cleverspeech:latest
-            public.ecr.aws/w4s1p0b6/cleverspeech:latest
           no-cache: true
           push: true
           pull: true
           file: ./docker/Dockerfile.latest
           
+      - name: Push to ECR
+        env:
+          AWS_IMAGE_REPO: public.ecr.aws/w4s1p0b6/cleverspeech
+        run: |
+          docker pull dijksterhuis/cleverspeech:latest
+          docker tag dijksterhuis/cleverspeech:latest ${AWS_IMAGE_REPO}:latest
+          docker push ${AWS_IMAGE_REPO}:latest
