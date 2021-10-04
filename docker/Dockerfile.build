@@ -41,16 +41,14 @@ RUN chmod +x /tini
 
 USER cleverspeech
 ENV CLEVERSPEECH_URL=https://github.com/dijksterhuis/cleverSpeech
-RUN git clone --recurse-submodules ${CLEVERSPEECH_URL} ${CLEVERSPEECH_HOME}
-# delete deepspeech submodule contents
-### all versions
-RUN rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/doc/*
-RUN rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/examples/*
-RUN rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/taskcluster/*
-### later versions
-RUN rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/src/tensorflow/*
-RUN rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/src/kenlm/*
-RUN rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/src/native_client/*
+# clone, but delete deepspeech submodule contents (tf is massive)
+RUN git clone --recurse-submodules ${CLEVERSPEECH_URL} ${CLEVERSPEECH_HOME} \
+ && rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/doc/*
+ && rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/examples/*
+ && rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/taskcluster/*
+ && rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/src/tensorflow/*
+ && rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/src/kenlm/*
+ && rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/src/native_client/*
 
 ENV DEEPSPEECH_DATA_DIR="${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/data"
 RUN mkdir -p ${DEEPSPEECH_DATA_DIR}
@@ -79,10 +77,10 @@ USER cleverspeech
 WORKDIR ${CLEVERSPEECH_HOME}
 RUN ${CLEVERSPEECH_HOME}/bin/data/create-silence-dir.sh
 
-FROM base as data-refsig
-USER cleverspeech
-WORKDIR ${CLEVERSPEECH_HOME}
-RUN ${CLEVERSPEECH_HOME}/bin/data/create-refsig-dir.sh
+#FROM base as data-refsig
+#USER cleverspeech
+#WORKDIR ${CLEVERSPEECH_HOME}
+#RUN ${CLEVERSPEECH_HOME}/bin/data/create-refsig-dir.sh
 
 
 #############################
