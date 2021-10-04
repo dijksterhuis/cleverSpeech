@@ -53,5 +53,5 @@ jobs:
           no-cache: true
           push: true
           pull: true
-          file: ./docker/Dockerfile.latest
+          file: ./docker/Dockerfile.build
 
