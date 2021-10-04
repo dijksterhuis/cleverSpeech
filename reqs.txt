@@ -1,6 +1,6 @@
-# soundfile has a nicer API than scipy.io.wavfile
 soundfile
 pyloudnorm
+pandas
 
 # A and ITU weighting curves which can be applied during evaluation
 git+https://github.com/endolith/waveform_analysis.git@master#egg=waveform_analysis
