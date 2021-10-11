@@ -72,10 +72,10 @@ USER cleverspeech
 WORKDIR ${CLEVERSPEECH_HOME}
 RUN ${CLEVERSPEECH_HOME}/bin/data/create-samples-dir.sh
 
-FROM base as data-silence
-USER cleverspeech
-WORKDIR ${CLEVERSPEECH_HOME}
-RUN ${CLEVERSPEECH_HOME}/bin/data/create-silence-dir.sh
+#FROM base as data-silence
+#USER cleverspeech
+#WORKDIR ${CLEVERSPEECH_HOME}
+#RUN ${CLEVERSPEECH_HOME}/bin/data/create-silence-dir.sh
 
 #FROM base as data-refsig
 #USER cleverspeech
@@ -102,7 +102,7 @@ FROM base as installs
 USER cleverspeech
 COPY --from=dsdownloads ${DEEPSPEECH_DATA_DIR} ${DEEPSPEECH_DATA_DIR}
 COPY --from=data-samples ${CLEVERSPEECH_HOME}/samples/ ${CLEVERSPEECH_HOME}/samples/
-COPY --from=data-silence ${CLEVERSPEECH_HOME}/silence/ ${CLEVERSPEECH_HOME}/silence/
+#COPY --from=data-silence ${CLEVERSPEECH_HOME}/silence/ ${CLEVERSPEECH_HOME}/silence/
 #COPY --from=data-refsig ${CLEVERSPEECH_HOME}/reference-signals/ ${CLEVERSPEECH_HOME}/reference-signals/
 
 RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
