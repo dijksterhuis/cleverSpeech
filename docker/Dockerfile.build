@@ -1,5 +1,5 @@
-#FROM nvcr.io/nvidia/tensorflow:21.10-tf1-py3 as base
-FROM ubuntu:latest as base
+FROM nvcr.io/nvidia/tensorflow:21.10-tf1-py3 as base
+#FROM ubuntu:latest as base
 
 USER root
 # set up the basic image
@@ -64,6 +64,11 @@ RUN git clone --recurse-submodules --shallow-submodules ${CLEVERSPEECH_URL} ${CL
 ENV DEEPSPEECH_DATA_DIR="${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/data"
 RUN mkdir -p ${DEEPSPEECH_DATA_DIR}
 
+RUN python3 -m pip install \
+  --no-cache-dir \
+  --extra-index-url https://pypi.ngc.nvidia.com \
+  --upgrade --user -e ${CLEVERSPEECH_HOME} \
+ && rm -rf /opt/tensorflow/ /usr/local/etc/jupyter/ /workspace/
 
 # == Use multi-stage builds for large files or build steps where we only need the final ouput.
 
@@ -108,18 +113,12 @@ RUN ${CLEVERSPEECH_HOME}/bin/data/create-samples-dir.sh
 #############################
 # install everything
 
-FROM base as installs
+FROM base as downloads
 
 USER cleverspeech
 COPY --from=dsdownloads ${DEEPSPEECH_DATA_DIR} ${DEEPSPEECH_DATA_DIR}
 COPY --from=data-samples ${CLEVERSPEECH_HOME}/samples/ ${CLEVERSPEECH_HOME}/samples/
-#COPY --from=data-silence ${CLEVERSPEECH_HOME}/silence/ ${CLEVERSPEECH_HOME}/silence/
-#COPY --from=data-refsig ${CLEVERSPEECH_HOME}/reference-signals/ ${CLEVERSPEECH_HOME}/reference-signals/
 
-RUN python3 -m pip install \
-  --no-cache-dir \
-  --extra-index-url https://pypi.ngc.nvidia.com \
-  --user -e ${CLEVERSPEECH_HOME}
 
 #COPY --from=decoder /home/cleverspeech/dist/ ./dist/
 #RUN python3 -m pip install --user --force-reinstall ./dist/*.whl
@@ -128,7 +127,7 @@ RUN python3 -m pip install \
 # entrypoint setup
 # must be run as root so we can switch users and change file ownership at runtime
 
-FROM installs
+FROM downloads
 USER root
 RUN rm -rf /tmp/*
 RUN cp -fv ${CLEVERSPEECH_HOME}/docker/entrypoint.sh /entrypoint.sh
@@ -144,5 +143,3 @@ WORKDIR ${CLEVERSPEECH_HOME}
 
 # entrypoint handles the UID and GID switching for deepspeech model files and output directories etc
 ENTRYPOINT ["/tini", "-s", "-g", "--", "/entrypoint.sh"]
-ENV NVIDIA_DRIVER_CAPABILITIES="utility,compute"
-ENV NVIDIA_REQUIRE_CUDA="cuda>=10.0"
