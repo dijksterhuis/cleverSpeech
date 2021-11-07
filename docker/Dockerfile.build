@@ -9,6 +9,10 @@ ENV USER_ID=1000
 ENV GROUP_ID=1000
 ENV CLEVERSPEECH_HOME="/home/${USER}/cleverSpeech"
 
+# https://dev.to/setevoy/docker-configure-tzdata-and-timezone-during-build-20bk
+ENV TZ=Europe/London
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 RUN groupadd -g ${GROUP_ID} ${USER}
 RUN useradd -m ${USER} -g ${GROUP_ID} -u ${USER_ID}
 
