@@ -1,4 +1,4 @@
-FROM tensorflow/tensorflow:1.15.5-gpu-py3 as base
+FROM nvcr.io/nvidia/tensorflow:21.10-tf1-py3 as base
 
 USER root
 # set up the basic image
@@ -26,6 +26,7 @@ RUN apt update \
 	python3 \
 	llvm-8* \
 	parallel \
+    python3-xdg \
  && apt clean \
  && rm -rf /var/lib/apt/lists/* \
  && apt autoremove -yqq
