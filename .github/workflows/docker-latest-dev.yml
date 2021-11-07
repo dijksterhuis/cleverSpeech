@@ -8,7 +8,7 @@ on:
       - 'cleverspeech/**'
       - 'cleverspeech'
       - '.github/workflows/docker-latest.yml'
-      - 'docker/Dockerfile.latest'
+      - 'docker/Dockerfile.dev.latest'
   # == or run manually
   workflow_dispatch:
 
@@ -52,5 +52,5 @@ jobs:
           no-cache: true
           push: true
           pull: true
-          file: ./docker/Dockerfile.latest
+          file: ./docker/Dockerfile.dev.latest
           
