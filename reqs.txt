@@ -12,9 +12,10 @@ matplotlib
 argparse
 boto3
 py3nvml
-nvidia-tensorflow[horovod]  # requires that the `nvidia-pyindex` package has already been installed
+tensorflow-gpu>=1.13.1,<2.0.0
 deepspeech-gpu==0.9.3
 ds_ctcdecoder==0.9.3
+tensorflow-determinism
 
 # deepspeech 0.93 dependencies
 semver

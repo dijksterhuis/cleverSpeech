@@ -13,7 +13,8 @@ on:
       - 'README.md'
       - 'LICENSE'
       - 'VERSION'
-      - 'docker/**.latest'
+      - 'docker/Dockerfile.latest'
+      - 'docker/Dockerfile.dev.latest'
   workflow_dispatch:
 jobs:
   docker-build-master:
@@ -34,14 +35,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_LOGIN_USER }}
           password: ${{ secrets.DOCKER_LOGIN_TOKEN }}
-
-      - name: Login to NVIDIA nvcr.io
-        uses: docker/login-action@v1
-        with:
-          registry: nvcr.io
-          username: $oauthtoken
-          password: ${{ secrets.NVCR_API_KEY }}
-
+          
 #      - name: Login to Public AWS ECR
 #        uses: docker/login-action@v1
 #        with:
