@@ -48,9 +48,11 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           tags: |
+            dijksterhuis/cleverspeech:dev-${{ github.sha }}
             dijksterhuis/cleverspeech:dev
 #            public.ecr.aws/w4s1p0b6/cleverspeech:latest
           no-cache: true
+          build-args: branch=dev
           push: true
           pull: true
           file: ./docker/Dockerfile.build

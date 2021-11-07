@@ -52,6 +52,7 @@ jobs:
             dijksterhuis/cleverspeech:latest
 #            public.ecr.aws/w4s1p0b6/cleverspeech:latest
           no-cache: true
+          build-args: branch=master
           push: true
           pull: true
           file: ./docker/Dockerfile.build
