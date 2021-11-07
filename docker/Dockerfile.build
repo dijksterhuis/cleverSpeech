@@ -32,6 +32,7 @@ RUN apt update \
 	llvm-8* \
 	parallel \
     python3-xdg \
+    python3-pip \
  && apt clean \
  && rm -rf /var/lib/apt/lists/* \
  && apt autoremove -yqq
