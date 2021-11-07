@@ -44,7 +44,9 @@ ENV CLEVERSPEECH_URL=https://github.com/dijksterhuis/cleverSpeech
 # clone, but delete deepspeech submodule contents (tf is massive)
 ARG branch=master
 RUN git clone --recurse-submodules --shallow-submodules ${CLEVERSPEECH_URL} ${CLEVERSPEECH_HOME} \
- && git checkout ${branch} && git pull --recurse-submodules \
+ && cd ${CLEVERSPEECH_HOME} \
+ && git checkout ${branch} \
+ && git pull --recurse-submodules \
  && rm -rfv ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/doc/* \
  && rm -rfv ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/examples/* \
  && rm -rfv ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/taskcluster/* \
