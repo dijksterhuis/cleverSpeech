@@ -67,8 +67,11 @@ RUN mkdir -p ${DEEPSPEECH_DATA_DIR}
 RUN python3 -m pip install \
   --no-cache-dir \
   --extra-index-url https://pypi.ngc.nvidia.com \
-  --upgrade --user -e ${CLEVERSPEECH_HOME} \
- && rm -rf /opt/tensorflow/ /usr/local/etc/jupyter/ /workspace/
+  --src /tmp/ \
+  --upgrade -e ${CLEVERSPEECH_HOME}
+
+USER root
+RUN rm -rf /opt/tensorflow/ /usr/local/etc/jupyter/ /workspace/
 
 # == Use multi-stage builds for large files or build steps where we only need the final ouput.
 
