@@ -5,17 +5,18 @@ Code to generate adversarial examples for [Mozilla DeepSpeech][1].
 Began as a modified version of [Carlini and Wagner's attack][0].
 Has slowly turned into a bit of a behemoth.
 
-This is the build repo.
-If you want to see the package in action, grab a docker image or install the package
-using the steps outlined below.
+This is the top-level build repo.
+If you want to run the code: grab a docker image or install the package using the steps below.
+
+The images (and code) use the [NVIDIA fork](https://github.com/nvidia/tensorflow) of TensorFlow V1
+as it is updated regularly with newer CUDA + CuDNN versions (Tensorflow have abandoned V1).
+The NVIDIA fork should auto-detect you can run the code on CPU or GPU (like Tensorflow V2) and
+includes useful additional features like profiling tools etc.
 
 ## run the code
 
-Docker images are available on both
-[DockerHub](https://hub.docker.com/r/dijksterhuis/cleverspeech)
-or 
-[AWS ECR](https://gallery.ecr.aws/w4s1p0b6/cleverspeech)
-(in case you want to avoid DockerHub's rate limiting).
+Docker images are available on
+[DockerHub](https://hub.docker.com/r/dijksterhuis/cleverspeech).
 Each docker image contains the necessary audio examples, transcripts and model checkpoints etc. to
 get up and running with minimal fussing about. 
 
@@ -60,17 +61,22 @@ switch users after start up (otherwise you can't `chown` the model checkpoints/s
 
 ### don't like docker?
 
-Run:
+The NVIDIA tensorflow package will install the latest `CUDA` and `CuDNN` components for you
+(be mindful that these will take up a lot of disk space!)
+
+In theory, you should be able to run:
 ```bash
-git clone --recurse-submodules \  # may take a while due to tensorflow submodule in DeepSpeech repo
-  https://github.com/dijksterhuis/cleverSpeech.git \
+git clone --recurse-submodules https://github.com/dijksterhuis/cleverSpeech.git \
   && cd ./cleverSpeech/ \
+  && python3 -m pip install virtualenv \
+  && virtualenv -p python3 venv \
+  && . ./venv/bin/activate \
+  && python3 -m pip install nvidia-pyindex \
+  && python3 -m pip install -e . \
   && ./bin/downloads.sh \
-  && python3 -m pip install -e .
 ```
 
-Then run an experiment as before
-and have fun fixing undocumented/unexpected dependency errors 
+Then run an experiment as before and have fun fixing undocumented/unexpected dependency errors
 (there *shouldn't* be any on `ubuntu >= 18.04`).
 
 
