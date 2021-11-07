@@ -2,4 +2,4 @@
 [submodule "cleverspeech"]
 	path = cleverspeech
 	url = ../cleverspeech-py.git
-	branch = master
+	branch = dev
