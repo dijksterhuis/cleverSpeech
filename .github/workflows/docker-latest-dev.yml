@@ -1,4 +1,4 @@
-name: docker-latest
+name: docker-latest-dev
 
 on:
   # == build when api changes detected
@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  docker-latest:
+  docker-latest-dev:
     runs-on: ubuntu-latest
     steps:
     

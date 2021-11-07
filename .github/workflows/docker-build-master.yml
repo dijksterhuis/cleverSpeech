@@ -1,4 +1,4 @@
-name: docker-build
+name: docker-build-master
 
 on:
   push:
@@ -17,7 +17,7 @@ on:
       - 'docker/Dockerfile.dev.latest'
   workflow_dispatch:
 jobs:
-  docker-full:
+  docker-build-master:
     runs-on: ubuntu-latest
     steps:
     
