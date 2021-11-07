@@ -116,7 +116,10 @@ COPY --from=data-samples ${CLEVERSPEECH_HOME}/samples/ ${CLEVERSPEECH_HOME}/samp
 #COPY --from=data-silence ${CLEVERSPEECH_HOME}/silence/ ${CLEVERSPEECH_HOME}/silence/
 #COPY --from=data-refsig ${CLEVERSPEECH_HOME}/reference-signals/ ${CLEVERSPEECH_HOME}/reference-signals/
 
-RUN python3 -m pip install --extra-index-url https://pypi.ngc.nvidia.com --user -e ${CLEVERSPEECH_HOME}
+RUN python3 -m pip install \
+  --no-cache-dir \
+  --extra-index-url https://pypi.ngc.nvidia.com \
+  --user -e ${CLEVERSPEECH_HOME}
 
 #COPY --from=decoder /home/cleverspeech/dist/ ./dist/
 #RUN python3 -m pip install --user --force-reinstall ./dist/*.whl
