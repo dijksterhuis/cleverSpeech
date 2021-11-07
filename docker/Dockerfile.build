@@ -42,7 +42,7 @@ RUN chmod +x /tini
 USER cleverspeech
 ENV CLEVERSPEECH_URL=https://github.com/dijksterhuis/cleverSpeech
 # clone, but delete deepspeech submodule contents (tf is massive)
-RUN git clone --recurse-submodules ${CLEVERSPEECH_URL} ${CLEVERSPEECH_HOME} \
+RUN git clone --recurse-submodules --shallow-submodules ${CLEVERSPEECH_URL} ${CLEVERSPEECH_HOME} \
  && rm -rfv ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/doc/* \
  && rm -rfv ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/examples/* \
  && rm -rfv ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/taskcluster/* \
