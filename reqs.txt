@@ -12,6 +12,7 @@ matplotlib
 argparse
 boto3
 py3nvml
+nvidia-pyindex
 #tensorflow-gpu>=1.13.1,<2.0.0
 nvidia-tensorflow[horovod]
 deepspeech-gpu==0.9.3
