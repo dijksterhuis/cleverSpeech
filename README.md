@@ -66,7 +66,8 @@ The NVIDIA tensorflow package will install the latest `CUDA` and `CuDNN` compone
 
 In theory, you should be able to run:
 ```bash
-git clone --recurse-submodules https://github.com/dijksterhuis/cleverSpeech.git \
+git clone --recurse-submodules --shallow-submodules \
+  https://github.com/dijksterhuis/cleverSpeech.git \
   && cd ./cleverSpeech/ \
   && python3 -m pip install virtualenv \
   && virtualenv -p python3 venv \
