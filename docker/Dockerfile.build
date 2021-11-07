@@ -48,12 +48,12 @@ RUN git clone --recurse-submodules --shallow-submodules ${CLEVERSPEECH_URL} ${CL
  && cd ${CLEVERSPEECH_HOME} \
  && git checkout ${branch} \
  && git pull --recurse-submodules \
- && rm -rfv ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/doc/* \
- && rm -rfv ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/examples/* \
- && rm -rfv ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/taskcluster/* \
- && rm -rfv ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/src/tensorflow/* \
- && rm -rfv ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/src/kenlm/* \
- && rm -rfv ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/src/native_client/*
+ && rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/doc/* \
+ && rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/examples/* \
+ && rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/*/src/taskcluster/* \
+ && rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/src/tensorflow/* \
+ && rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/src/kenlm/* \
+ && rm -rf ${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/src/native_client/*
 
 ENV DEEPSPEECH_DATA_DIR="${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/data"
 RUN mkdir -p ${DEEPSPEECH_DATA_DIR}
