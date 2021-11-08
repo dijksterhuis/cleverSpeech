@@ -1,4 +1,4 @@
-name: docker-latest
+name: docker-latest-master
 
 on:
   # == build when api changes detected
@@ -7,7 +7,7 @@ on:
     paths:  
       - 'cleverspeech/**'
       - 'cleverspeech'
-      - '.github/workflows/docker-latest**.yml'
+      - '.github/workflows/docker-latest-master.yml'
       - 'docker/Dockerfile.latest'
   # == or run manually
   workflow_dispatch:
