@@ -3,7 +3,7 @@ name: docker-latest-dev
 on:
   # == build when api changes detected
   push:
-    branches: [ master ]
+    branches: [ dev ]
     paths:  
       - 'cleverspeech/**'
       - 'cleverspeech'

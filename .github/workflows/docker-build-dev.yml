@@ -15,6 +15,7 @@ on:
       - 'VERSION'
       - 'docker/Dockerfile.latest'
   workflow_dispatch:
+
 jobs:
   docker-build-dev:
     runs-on: ubuntu-latest
