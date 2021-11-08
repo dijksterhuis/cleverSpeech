@@ -7,7 +7,7 @@ on:
     paths:  
       - 'cleverspeech/**'
       - 'cleverspeech'
-      - '.github/workflows/docker-latest.yml'
+      - '.github/workflows/docker-latest**.yml'
       - 'docker/Dockerfile.latest'
   # == or run manually
   workflow_dispatch:
