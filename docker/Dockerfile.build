@@ -1,5 +1,4 @@
-FROM nvcr.io/nvidia/tensorflow:21.10-tf1-py3 as base
-#FROM ubuntu:latest as base
+FROM tensorflow/tensorflow:1.15.5-gpu-py3 as base
 
 USER root
 # set up the basic image
@@ -8,10 +7,6 @@ ENV USER=cleverspeech
 ENV USER_ID=1000
 ENV GROUP_ID=1000
 ENV CLEVERSPEECH_HOME="/home/${USER}/cleverSpeech"
-
-# https://dev.to/setevoy/docker-configure-tzdata-and-timezone-during-build-20bk
-ENV TZ=Europe/London
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN groupadd -g ${GROUP_ID} ${USER}
 RUN useradd -m ${USER} -g ${GROUP_ID} -u ${USER_ID}
@@ -31,8 +26,6 @@ RUN apt update \
 	python3 \
 	llvm-8* \
 	parallel \
-    python3-xdg \
-    python3-pip \
  && apt clean \
  && rm -rf /var/lib/apt/lists/* \
  && apt autoremove -yqq
@@ -47,7 +40,6 @@ ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
 
 USER cleverspeech
-ENV PATH="${PATH}:/home/cleverspeech/.local/bin"
 ENV CLEVERSPEECH_URL=https://github.com/dijksterhuis/cleverSpeech
 # clone, but delete deepspeech submodule contents (tf is massive)
 ARG branch=master
@@ -65,19 +57,6 @@ RUN git clone --recurse-submodules --shallow-submodules ${CLEVERSPEECH_URL} ${CL
 ENV DEEPSPEECH_DATA_DIR="${CLEVERSPEECH_HOME}/cleverspeech/models/__DeepSpeech_v0_9_3/data"
 RUN mkdir -p ${DEEPSPEECH_DATA_DIR}
 
-# nvcr.io/nvidia/tensorflow:xxxx-tf1-py3 images are built with the nvidia/tensorflow fork
-# **BUT** they install the package "tensorflow" compiled from source instead of from the
-# --extra-index-url https://pypi.ngc.nvidia.com package repository... the compiled version is faster
-# but it means we have to do a bit of trickery to not perform reinstalls
-
-RUN touch ${CLEVERSPEECH_HOME}/docker_build \
- && python3 -m pip install \
-  --no-cache-dir \
-  -e ${CLEVERSPEECH_HOME} \
- && rm -f ${CLEVERSPEECH_HOME}/docker_build
-
-USER root
-RUN rm -rf /opt/tensorflow/ /usr/local/etc/jupyter/ /workspace/
 
 # == Use multi-stage builds for large files or build steps where we only need the final ouput.
 
@@ -122,12 +101,15 @@ RUN ${CLEVERSPEECH_HOME}/bin/data/create-samples-dir.sh
 #############################
 # install everything
 
-FROM base as downloads
+FROM base as installs
 
 USER cleverspeech
 COPY --from=dsdownloads ${DEEPSPEECH_DATA_DIR} ${DEEPSPEECH_DATA_DIR}
 COPY --from=data-samples ${CLEVERSPEECH_HOME}/samples/ ${CLEVERSPEECH_HOME}/samples/
+#COPY --from=data-silence ${CLEVERSPEECH_HOME}/silence/ ${CLEVERSPEECH_HOME}/silence/
+#COPY --from=data-refsig ${CLEVERSPEECH_HOME}/reference-signals/ ${CLEVERSPEECH_HOME}/reference-signals/
 
+RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
 
 #COPY --from=decoder /home/cleverspeech/dist/ ./dist/
 #RUN python3 -m pip install --user --force-reinstall ./dist/*.whl
@@ -136,7 +118,7 @@ COPY --from=data-samples ${CLEVERSPEECH_HOME}/samples/ ${CLEVERSPEECH_HOME}/samp
 # entrypoint setup
 # must be run as root so we can switch users and change file ownership at runtime
 
-FROM downloads
+FROM installs
 USER root
 RUN rm -rf /tmp/*
 RUN cp -fv ${CLEVERSPEECH_HOME}/docker/entrypoint.sh /entrypoint.sh
@@ -152,3 +134,4 @@ WORKDIR ${CLEVERSPEECH_HOME}
 
 # entrypoint handles the UID and GID switching for deepspeech model files and output directories etc
 ENTRYPOINT ["/tini", "-s", "-g", "--", "/entrypoint.sh"]
+
