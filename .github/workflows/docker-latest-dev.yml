@@ -46,7 +46,9 @@ jobs:
             dijksterhuis/cleverspeech:dev
 #            public.ecr.aws/w4s1p0b6/cleverspeech:latest
           no-cache: true
-          build-args: branch=dev
+          build-args: |
+            "branch=dev"
+            "base_image_tag=dev"
           push: true
           pull: true
           file: ./docker/Dockerfile.latest
