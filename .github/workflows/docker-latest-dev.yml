@@ -1,14 +1,14 @@
-name: docker-latest-dev
+name: docker-latest
 
 on:
   # == build when api changes detected
   push:
-    branches: [ dev ]
+    branches: [ master ]
     paths:  
       - 'cleverspeech/**'
       - 'cleverspeech'
       - '.github/workflows/docker-latest.yml'
-      - 'docker/Dockerfile.dev.latest'
+      - 'docker/Dockerfile.latest'
   # == or run manually
   workflow_dispatch:
 
@@ -45,7 +45,8 @@ jobs:
             dijksterhuis/cleverspeech:dev
 #            public.ecr.aws/w4s1p0b6/cleverspeech:latest
           no-cache: true
+          build-args: branch=dev
           push: true
           pull: true
-          file: ./docker/Dockerfile.dev.latest
+          file: ./docker/Dockerfile.latest
           
