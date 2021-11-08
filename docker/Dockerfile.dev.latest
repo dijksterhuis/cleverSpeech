@@ -1,9 +1,0 @@
-FROM dijksterhuis/cleverspeech:dev
-
-USER cleverspeech
-RUN cd ${CLEVERSPEECH_HOME} \
- && git checkout dev \
- && git pull --recurse-submodules \
- && echo "Completed checkouts."
-RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
-USER root
