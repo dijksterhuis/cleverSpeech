@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
-
 if [[ $# -eq 0 ]]
 then
     cmd="/bin/bash"
 else
     cmd="${@}"
 fi
+
+echo "PATH=\${PATH}:/home/cleverspeech/.local/bin" >> /home/cleverspeech/.bashrc
 
 if [[ -z ${LOCAL_UID} && -z ${LOCAL_GID} ]]
 then
@@ -41,7 +42,6 @@ else
     usermod -u ${LOCAL_UID} -aG ${LOCAL_GID} cleverspeech
 
     echo "==> all done."
-
 
 fi
 
