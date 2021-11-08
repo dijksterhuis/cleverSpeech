@@ -2,6 +2,7 @@ name: docker-latest-dev
 
 on:
   # == build when api changes detected
+  workflow_dispatch:
   push:
     branches: [ dev ]
     paths:  
@@ -9,8 +10,6 @@ on:
       - 'cleverspeech'
       - '.github/workflows/docker-latest-dev.yml'
       - 'docker/Dockerfile.latest'
-  # == or run manually
-  workflow_dispatch:
 
 jobs:
   docker-latest-dev:

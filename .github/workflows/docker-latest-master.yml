@@ -2,6 +2,7 @@ name: docker-latest-master
 
 on:
   # == build when api changes detected
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths:  
@@ -9,8 +10,6 @@ on:
       - 'cleverspeech'
       - '.github/workflows/docker-latest-master.yml'
       - 'docker/Dockerfile.latest'
-  # == or run manually
-  workflow_dispatch:
 
 jobs:
   docker-latest-master:
@@ -46,7 +45,9 @@ jobs:
             dijksterhuis/cleverspeech:latest
 #            public.ecr.aws/w4s1p0b6/cleverspeech:latest
           no-cache: true
-          build-args: branch=master
+          build-args: |
+            "branch=master"
+            "base_image_tag=latest"
           push: true
           pull: true
           file: ./docker/Dockerfile.latest
