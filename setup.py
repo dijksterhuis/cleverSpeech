@@ -1,5 +1,4 @@
 from setuptools import setup
-import os
 
 
 def get_info_from_plain_text(file_path):
@@ -10,8 +9,7 @@ def get_info_from_plain_text(file_path):
 
 version = get_info_from_plain_text("./VERSION")[0]
 
-requirements_file = "reqs-docker.txt" if "docker_build" in os.listdir("./") else "reqs.txt"
-requirements = [r.rstrip("\n") for r in get_info_from_plain_text(requirements_file)]
+requirements = [r.rstrip("\n") for r in get_info_from_plain_text("./reqs.txt")]
 requirements = [x for x in requirements if len(x) != 0]
 requirements = [x for x in requirements if x[0] != "#"]
 requirements = [x.split("#egg=")[1] + " @ " + x if "git" in x else x for x in requirements]
