@@ -7,5 +7,5 @@ RUN cd ${CLEVERSPEECH_HOME} \
  && git checkout ${branch} \
  && git pull --recurse-submodules \
  && echo "Completed checkouts."
-RUN python3 -m pip install --extra-index-url https://pypi.ngc.nvidia.com --user -e ${CLEVERSPEECH_HOME}
+RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
 USER root
