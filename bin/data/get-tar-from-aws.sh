@@ -2,7 +2,7 @@
 
 set -e
 
-ARCHIVE_FILE_NAME=mcv1-sentences.tar.gz
+ARCHIVE_FILE_NAME=${1}
 SAMPLES_URL=https://cleverspeech-data.s3.eu-west-2.amazonaws.com/${ARCHIVE_FILE_NAME}
 
 if [[ -f ${ARCHIVE_FILE_NAME} ]]
