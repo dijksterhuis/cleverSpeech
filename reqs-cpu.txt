@@ -1,0 +1,4 @@
+py3nvml
+tensorflow>=1.13.1,<2.0.0
+deepspeech==0.9.3
+tensorflow-determinism
