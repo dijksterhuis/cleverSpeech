@@ -14,5 +14,7 @@ echo "++ | Getting DeepSpeech files..."
 echo "-- | Done."
 
 echo "++ | Getting pre-processed Common Voice files from AWS..."
-./bin/data/create-samples-dir.sh
+./bin/data/get-mcv1-sentences-test.sh
+./bin/data/get-mcv7-sentences-test.sh
+./bin/data/get-mcv1-singlewords-test.sh
 echo "-- | Done."
