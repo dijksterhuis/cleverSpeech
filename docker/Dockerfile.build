@@ -71,21 +71,20 @@ RUN ${CLEVERSPEECH_HOME}/bin/deepspeech/get-v093-model-files.sh
 #############################
 # common voice audio examples
 
-FROM base as data-samples
+FROM base as mcv1_sentences
 USER cleverspeech
 WORKDIR ${CLEVERSPEECH_HOME}
-RUN ${CLEVERSPEECH_HOME}/bin/data/create-samples-dir.sh
+RUN ${CLEVERSPEECH_HOME}/bin/data/get-mcv1-sentences-test.sh
 
-#FROM base as data-silence
-#USER cleverspeech
-#WORKDIR ${CLEVERSPEECH_HOME}
-#RUN ${CLEVERSPEECH_HOME}/bin/data/create-silence-dir.sh
+FROM base as mcv7_sentences
+USER cleverspeech
+WORKDIR ${CLEVERSPEECH_HOME}
+RUN ${CLEVERSPEECH_HOME}/bin/data/get-mcv7-sentences-test.sh
 
-#FROM base as data-refsig
-#USER cleverspeech
-#WORKDIR ${CLEVERSPEECH_HOME}
-#RUN ${CLEVERSPEECH_HOME}/bin/data/create-refsig-dir.sh
-
+FROM base as mcv7_singlewords
+USER cleverspeech
+WORKDIR ${CLEVERSPEECH_HOME}
+RUN ${CLEVERSPEECH_HOME}/bin/data/get-mcv7-sentences-test.sh
 
 #############################
 # deepspeech ctc decoder for 0.4.1 only
@@ -104,13 +103,24 @@ RUN ${CLEVERSPEECH_HOME}/bin/data/create-samples-dir.sh
 FROM base as installs
 
 USER cleverspeech
+
+ENV MCV1_SENTENCES_DATA_DIR=${CLEVERSPEECH_HOME}/samples/mcv1/sentences/
+ENV MCV7_SENTENCES_DATA_DIR=${CLEVERSPEECH_HOME}/samples/mcv7/sentences/
+ENV MCV1_SINGLEWORDS_DATA_DIR=${CLEVERSPEECH_HOME}/samples/mcv7/singlewords/
+
+RUN mkdir -p \
+  ${MCV1_SENTENCES_DATA_DIR} \
+  ${MCV1_SENTENCES_DATA_DIR} \
+  ${MCV7_SINGLEWORDS_DATA_DIR}
+
 COPY --from=dsdownloads ${DEEPSPEECH_DATA_DIR} ${DEEPSPEECH_DATA_DIR}
-COPY --from=data-samples ${CLEVERSPEECH_HOME}/samples/ ${CLEVERSPEECH_HOME}/samples/
-#COPY --from=data-silence ${CLEVERSPEECH_HOME}/silence/ ${CLEVERSPEECH_HOME}/silence/
-#COPY --from=data-refsig ${CLEVERSPEECH_HOME}/reference-signals/ ${CLEVERSPEECH_HOME}/reference-signals/
+COPY --from=mcv1_sentences  ${MCV1_SENTENCES_DATA_DIR} ${MCV1_SENTENCES_DATA_DIR}
+COPY --from=mcv7_sentences ${MCV1_SENTENCES_DATA_DIR} ${MCV7_SENTENCES_DATA_DIR}
+COPY --from=mcv7_singlewords ${MCV7_SINGLEWORDS_DATA_DIR} ${MCV7_SINGLEWORDS_DATA_DIR}
 
 RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
 
+# manuallly build decoders if needed (e.g. v0.4.1)
 #COPY --from=decoder /home/cleverspeech/dist/ ./dist/
 #RUN python3 -m pip install --user --force-reinstall ./dist/*.whl
 
