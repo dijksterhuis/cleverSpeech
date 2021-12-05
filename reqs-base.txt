@@ -13,6 +13,7 @@ argparse
 boto3
 ds_ctcdecoder==0.9.3
 pyxdg
+sox
 
 # deepspeech 0.93 dependencies
 semver
