@@ -118,6 +118,7 @@ COPY --from=mcv7_sentences ${MCV7_SENTENCES_DATA_DIR} ${MCV7_SENTENCES_DATA_DIR}
 COPY --from=mcv7_singlewords ${MCV7_SINGLEWORDS_DATA_DIR} ${MCV7_SINGLEWORDS_DATA_DIR}
 COPY --from=dsdownloads ${DEEPSPEECH_DATA_DIR} ${DEEPSPEECH_DATA_DIR}
 
+ENV PATH="${PATH}:/home/cleverspeech/.local/bin"
 RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
 
 # manuallly build decoders if needed (e.g. v0.4.1)
