@@ -15,17 +15,16 @@ DATASET_MAJOR_ID=${2}
 DATASET_MINOR_ID=${3}
 
 WAV_DIR=${EXISTING_DATA_DIR}
-TRANSCRIPTION_FILE=${EXISTING_DATA_DIR}/test.csv
+if [[ "${DATASET_MAJOR_ID}" == "mcv7" ]]
+then
+  TRANSCRIPTION_FILE=${EXISTING_DATA_DIR}/../test.csv
+elif [[ "${DATASET_MAJOR_ID}" == "mcv1" ]]
+then
+  TRANSCRIPTION_FILE=${EXISTING_DATA_DIR}/../cv-valid-test.csv
+fi
 NEW_TRANSCRIPTION_DIR=./samples/${DATASET_MAJOR_ID}/${DATASET_MINOR_ID}/
 NEW_WAV_DIR=${NEW_TRANSCRIPTION_DIR}/all/
 ARCHIVE_NAME=${DATASET_MAJOR_ID}-${DATASET_MINOR_ID}.tar.gz
-
-
-if [[ -z ${MCV_CORPUS_DIR} ]]
-then
-  echo "I need the path to the cv_corpus_v1/ directory as an argument please!"
-  exit
-fi
 
 mkdir -p ${NEW_WAV_DIR}
 
