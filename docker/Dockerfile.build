@@ -74,17 +74,17 @@ RUN ${CLEVERSPEECH_HOME}/bin/deepspeech/get-v093-model-files.sh
 FROM base as mcv1_sentences
 USER cleverspeech
 WORKDIR ${CLEVERSPEECH_HOME}
-RUN ${CLEVERSPEECH_HOME}/bin/data/get-mcv1-sentences-test.sh
+RUN ${CLEVERSPEECH_HOME}/bin/data/get-tar-from-aws.sh mcv1-sentences.tar.gz
 
 FROM base as mcv7_sentences
 USER cleverspeech
 WORKDIR ${CLEVERSPEECH_HOME}
-RUN ${CLEVERSPEECH_HOME}/bin/data/get-mcv7-sentences-test.sh
+RUN ${CLEVERSPEECH_HOME}/bin/data/get-tar-from-aws.sh mcv7-sentences.tar.gz
 
 FROM base as mcv7_singlewords
 USER cleverspeech
 WORKDIR ${CLEVERSPEECH_HOME}
-RUN ${CLEVERSPEECH_HOME}/bin/data/get-mcv7-sentences-test.sh
+RUN ${CLEVERSPEECH_HOME}/bin/data/get-tar-from-aws.sh mcv7-singlewords.tar.gz
 
 #############################
 # deepspeech ctc decoder for 0.4.1 only
