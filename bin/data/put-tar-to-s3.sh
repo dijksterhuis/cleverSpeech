@@ -5,7 +5,17 @@ set -e
 echo """
   This script is for minimal organisation on original mozilla common voice test
   data sets and pushes source data to my own S3 repository. It is not intended
-  for use by others.
+  for use by others as there's a few additional commands to run first:
+
+    Convert from mp3 to wav files:
+      python3 import_cv*.py <args>
+
+    Move wav files:
+      find ./<path-to-dir-1> -type f -path '*.wav' -exec mv -vf {} ./<path-to-dir-2>\;
+
+    Move transcription csv file:
+      find ./<path-to-dir-1> -type f -path '*.csv' -exec mv -vf {} ./<path-to-dir-2>\;
+
   """
 
 EXISTING_DATA_DIR=${1}
