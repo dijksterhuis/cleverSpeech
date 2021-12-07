@@ -78,17 +78,6 @@ RUN ${CLEVERSPEECH_HOME}/bin/deepspeech/get-v093-model-files.sh
 #RUN make bindings NUM_PROCESSES=4
 #RUN cp -r ${CLEVERSPEECH_HOME}/models/DeepSpeech_v041/src/native_client/ctcdecode/dist/ /home/cleverspeech/dist/
 
-#############################
-# install everything
-
-FROM base as installs
-
-USER cleverspeech
-
-ENV PATH="${PATH}:/home/cleverspeech/.local/bin"
-RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
-COPY --from=dsdownloads ${DEEPSPEECH_DATA_DIR} ${DEEPSPEECH_DATA_DIR}
-
 # manuallly build decoders if needed (e.g. v0.4.1)
 #COPY --from=decoder /home/cleverspeech/dist/ ./dist/
 #RUN python3 -m pip install --user --force-reinstall ./dist/*.whl
@@ -97,12 +86,14 @@ COPY --from=dsdownloads ${DEEPSPEECH_DATA_DIR} ${DEEPSPEECH_DATA_DIR}
 # entrypoint setup
 # must be run as root so we can switch users and change file ownership at runtime
 
-FROM installs
+FROM base as installs
+USER cleverspeech
+ENV PATH="${PATH}:/home/cleverspeech/.local/bin"
+RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
 USER root
 RUN rm -rf /tmp/*
 RUN cp -fv ${CLEVERSPEECH_HOME}/docker/entrypoint.sh /entrypoint.sh
 RUN cp -fv ${CLEVERSPEECH_HOME}/docker/bash.bashrc /etc/bash.bashrc
-
 WORKDIR ${CLEVERSPEECH_HOME}
 
 # Use -g to kill entire process groups when terminating:
@@ -114,3 +105,8 @@ WORKDIR ${CLEVERSPEECH_HOME}
 # entrypoint handles the UID and GID switching for deepspeech model files and output directories etc
 ENTRYPOINT ["/tini", "-s", "-g", "--", "/entrypoint.sh"]
 
+FROM installs as final
+# copy this last as it takes longest
+USER cleverspeech
+COPY --from=dsdownloads ${DEEPSPEECH_DATA_DIR} ${DEEPSPEECH_DATA_DIR}
+USER root
