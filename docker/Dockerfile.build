@@ -69,24 +69,6 @@ WORKDIR ${CLEVERSPEECH_HOME}
 RUN ${CLEVERSPEECH_HOME}/bin/deepspeech/get-v093-model-files.sh
 
 #############################
-# common voice audio examples
-
-FROM base as mcv1_sentences
-USER cleverspeech
-WORKDIR ${CLEVERSPEECH_HOME}
-RUN ${CLEVERSPEECH_HOME}/bin/data/get-tar-from-aws.sh mcv1-sentences.tar.gz
-
-FROM base as mcv7_sentences
-USER cleverspeech
-WORKDIR ${CLEVERSPEECH_HOME}
-RUN ${CLEVERSPEECH_HOME}/bin/data/get-tar-from-aws.sh mcv7-sentences.tar.gz
-
-FROM base as mcv7_singlewords
-USER cleverspeech
-WORKDIR ${CLEVERSPEECH_HOME}
-RUN ${CLEVERSPEECH_HOME}/bin/data/get-tar-from-aws.sh mcv7-singlewords.tar.gz
-
-#############################
 # deepspeech ctc decoder for 0.4.1 only
 #
 #FROM base as decoder
@@ -96,7 +78,6 @@ RUN ${CLEVERSPEECH_HOME}/bin/data/get-tar-from-aws.sh mcv7-singlewords.tar.gz
 #RUN make bindings NUM_PROCESSES=4
 #RUN cp -r ${CLEVERSPEECH_HOME}/models/DeepSpeech_v041/src/native_client/ctcdecode/dist/ /home/cleverspeech/dist/
 
-
 #############################
 # install everything
 
@@ -104,22 +85,9 @@ FROM base as installs
 
 USER cleverspeech
 
-ENV MCV1_SENTENCES_DATA_DIR=${CLEVERSPEECH_HOME}/samples/mcv1/sentences/
-ENV MCV7_SENTENCES_DATA_DIR=${CLEVERSPEECH_HOME}/samples/mcv7/sentences/
-ENV MCV7_SINGLEWORDS_DATA_DIR=${CLEVERSPEECH_HOME}/samples/mcv7/singlewords/
-
-RUN mkdir -p \
-  ${MCV1_SENTENCES_DATA_DIR} \
-  ${MCV7_SENTENCES_DATA_DIR} \
-  ${MCV7_SINGLEWORDS_DATA_DIR}
-
-COPY --from=mcv1_sentences  ${MCV1_SENTENCES_DATA_DIR} ${MCV1_SENTENCES_DATA_DIR}
-COPY --from=mcv7_singlewords ${MCV7_SINGLEWORDS_DATA_DIR} ${MCV7_SINGLEWORDS_DATA_DIR}
-COPY --from=dsdownloads ${DEEPSPEECH_DATA_DIR} ${DEEPSPEECH_DATA_DIR}
-COPY --from=mcv7_sentences ${MCV7_SENTENCES_DATA_DIR} ${MCV7_SENTENCES_DATA_DIR}
-
 ENV PATH="${PATH}:/home/cleverspeech/.local/bin"
 RUN python3 -m pip install --user -e ${CLEVERSPEECH_HOME}
+COPY --from=dsdownloads ${DEEPSPEECH_DATA_DIR} ${DEEPSPEECH_DATA_DIR}
 
 # manuallly build decoders if needed (e.g. v0.4.1)
 #COPY --from=decoder /home/cleverspeech/dist/ ./dist/
