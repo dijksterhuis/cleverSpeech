@@ -1,0 +1,4 @@
+py3nvml
+tensorflow-gpu>=1.13.1,<2.0.0
+deepspeech-gpu==0.9.3
+tensorflow-determinism
