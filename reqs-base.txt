@@ -11,11 +11,9 @@ scipy
 matplotlib
 argparse
 boto3
-py3nvml
-tensorflow-gpu>=1.13.1,<2.0.0
-deepspeech-gpu==0.9.3
 ds_ctcdecoder==0.9.3
-tensorflow-determinism
+pyxdg
+sox
 
 # deepspeech 0.93 dependencies
 semver

@@ -1,12 +1,2 @@
-adv/
-tmp/
-*.sh
-*.wav
-*.json
-/models/*/data/
-/cleverspeech/
-/wiki/
-/models/
-/tmp/
-/scratch/
-*.tar.gz
+/*/
+!/docker/
