@@ -1,5 +1,4 @@
-#FROM tensorflow/tensorflow:1.15.5-gpu-py3 as base
-FROM nvcr.io/nvidia/tensorflow:22.03-tf1-py3 as base
+FROM tensorflow/tensorflow:1.15.5-gpu-py3 as base
 
 USER root
 # set up the basic image
@@ -11,6 +10,16 @@ ENV CLEVERSPEECH_HOME="/home/${USER}/cleverSpeech"
 
 RUN groupadd -g ${GROUP_ID} ${USER}
 RUN useradd -m ${USER} -g ${GROUP_ID} -u ${USER_ID}
+
+# NVIDIA updated the public key for the cuda repository and
+# Tensorflow 1.15.5 image hasn't been built in a year so needs the key added manually
+#
+# https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation
+# https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/
+
+RUN apt-key adv \
+ --fetch-keys \
+ https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub
 
 RUN apt update \
  && apt install -y \
